@@ -318,6 +318,12 @@ function Index() {
 
       {/* Footer */}
       <footer id="contact" className="scroll-mt-24 bg-surface-alt text-white">
+        <div className="overflow-hidden px-2 pt-6 leading-none">
+          <p className="whitespace-nowrap text-center font-display text-[13vw] font-extrabold uppercase leading-[0.8] tracking-tight text-white/[0.06] select-none">
+            SKEDIO
+          </p>
+        </div>
+
         <div className="mx-auto grid w-full max-w-[1200px] gap-14 px-6 py-16 md:py-24 lg:grid-cols-[1.4fr_2.4fr_1.4fr]">
           <div>
             <Wordmark className="brightness-0 invert" />
