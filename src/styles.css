@@ -1,0 +1,347 @@
+@import "@fontsource-variable/montserrat";
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 300;
+  font-style: normal;
+  src: url("./assets/fonts/Gilroy-Light.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 700 800;
+  font-style: normal;
+  src: url("./assets/fonts/Gilroy-ExtraBold.otf") format("opentype");
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+/* ------------------------------------------------------------------
+   Skédio Design Tokens
+   Brand purple is an accent, not a wash. High contrast, generous
+   whitespace, editorial type. See DESIGN brief §5–§9.
+------------------------------------------------------------------- */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+
+  --font-sans: "Montserrat Variable", "Montserrat", "Poppins", ui-sans-serif,
+    system-ui, sans-serif;
+  --font-heading: "Gilroy", "Plus Jakarta Sans", "Montserrat", ui-sans-serif,
+    system-ui, sans-serif;
+  --font-display: var(--font-heading);
+  --font-body: var(--font-sans);
+
+  --tracking-tightish: -0.04em;
+
+  --shadow-card: 0 8px 24px rgb(211 211 211 / 0.45);
+  --shadow-card-hover: 0 12px 32px rgb(211 211 211 / 0.65);
+  --shadow-card-dark: 0 8px 24px rgb(0 0 0 / 0.35);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Raw brand tokens */
+  --sk-purple: #8537f4;
+  --sk-purple-hover: #7025d9;
+  --sk-purple-light: #f0e7ff;
+  --sk-black: #1e1e1e;
+  --sk-off-white: #f2f2f2;
+  --sk-white: #ffffff;
+  --sk-gray: #555555;
+  --sk-gray-muted: #777777;
+  --sk-border: #d9d9d9;
+  --sk-success: #4cb817;
+  --sk-error: #d30000;
+
+  /* Semantic map (light) */
+  --radius: 0.75rem;
+  --background: var(--sk-off-white);
+  --foreground: #000000;
+  --card: var(--sk-white);
+  --card-foreground: #000000;
+  --popover: var(--sk-white);
+  --popover-foreground: #000000;
+  --primary: var(--sk-purple);
+  --primary-hover: var(--sk-purple-hover);
+  --primary-light: var(--sk-purple-light);
+  --primary-foreground: #ffffff;
+  --secondary: #e9e9e9;
+  --secondary-foreground: var(--sk-black);
+  --muted: #ececec;
+  --muted-foreground: var(--sk-gray); /* AA on off-white & white; #777 reserved for large/decorative text */
+  --accent: var(--sk-purple-light);
+  --accent-foreground: var(--sk-black);
+  --destructive: var(--sk-error);
+  --destructive-foreground: #ffffff;
+  --border: var(--sk-border);
+  --input: var(--sk-border);
+  --ring: var(--sk-purple);
+  --surface: var(--sk-white);
+  --surface-alt: var(--sk-black);
+  --ink: var(--sk-black);
+  --ink-foreground: #ffffff;
+}
+
+.dark {
+  --background: #121212;
+  --foreground: #f5f5f5;
+  --card: #1e1e1e;
+  --card-foreground: #f5f5f5;
+  --popover: #1e1e1e;
+  --popover-foreground: #f5f5f5;
+  --primary: var(--sk-purple);
+  --primary-hover: #8f52f6;
+  --primary-light: #2a1745;
+  --primary-foreground: #ffffff;
+  --secondary: #262626;
+  --secondary-foreground: #f5f5f5;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #2a1745;
+  --accent-foreground: #f5f5f5;
+  --destructive: #ff5252;
+  --destructive-foreground: #ffffff;
+  --border: rgb(255 255 255 / 12%);
+  --input: rgb(255 255 255 / 16%);
+  --ring: var(--sk-purple);
+  --surface: #1a1a1a;
+  --surface-alt: #000000;
+  --ink: #f5f5f5;
+  --ink-foreground: #121212;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    letter-spacing: -0.04em; /* Montserrat/UI tracking per brief §4 (em-based so it scales) */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+    letter-spacing: 0; /* Gilroy/Jakarta headings stay at 0 per brief §4 */
+    text-wrap: balance;
+  }
+  ::selection {
+    background: var(--sk-purple-light);
+    color: #000;
+  }
+  ::placeholder {
+    color: var(--sk-gray-muted);
+  }
+  ::caret-color {
+    color: var(--sk-purple);
+  }
+  :focus-visible {
+    outline: 2px solid var(--sk-purple);
+    outline-offset: 2px;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #c7c7c7;
+    border-radius: 999px;
+    border: 2px solid var(--sk-off-white);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b0b0b0;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Responsive type scale — clamp() anchored to brief §3.2 values:
+   mobile (≤~600px) / tablet (768px) / desktop (~900–990px+)
+------------------------------------------------------------------- */
+@layer components {
+  /*        mobile  → tablet @768 → desktop            */
+  .type-h1 {
+    font-size: clamp(2rem, 4.43vw, 3rem); /* 32 → 40 → 48 */
+    line-height: 1.05;
+    font-weight: 300;
+  }
+  .type-h2 {
+    font-size: clamp(2.125rem, 5.73vw, 3.5rem); /* 34 → 44 → 56 */
+    line-height: 1;
+    font-weight: 300;
+  }
+  .type-h3 {
+    font-size: clamp(1.75rem, 4.69vw, 2.625rem); /* 28 → 36 → 42 */
+    line-height: 1.05;
+    font-weight: 300;
+  }
+  .type-h4 {
+    font-size: clamp(1.5rem, 3.65vw, 2rem); /* 24 → 28 → 32 */
+    line-height: 1.1;
+    font-weight: 300;
+  }
+  .type-h5 {
+    font-size: clamp(1.25rem, 2.86vw, 1.5rem); /* 20 → 22 → 24 */
+    line-height: 1.2;
+    font-weight: 300;
+  }
+  .type-h6 {
+    font-size: clamp(1.125rem, 2.34vw, 1.25rem); /* 18 → 18 → 20 */
+    line-height: 1.2;
+    font-weight: 300;
+  }
+  .type-body-lg {
+    font-size: clamp(1rem, 2.21vw, 1.125rem); /* 16 → 17 → 18 */
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .type-body {
+    font-size: clamp(0.9375rem, 2.08vw, 1rem); /* 15 → 16 → 16 */
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .type-sm {
+    font-size: 0.875rem; /* 14 */
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .type-caption {
+    font-size: 0.75rem; /* 12 */
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .type-label {
+    font-size: 0.8125rem; /* 13 */
+    line-height: 1.3;
+    font-weight: 600;
+  }
+  .type-button {
+    font-size: 0.875rem; /* 14 */
+    line-height: 1;
+    font-weight: 600;
+  }
+
+  /* Eyebrow label — small caps voice used sparingly above section headings */
+  .eyebrow {
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.14em; /* positive tracking required for all-caps legibility */
+  }
+}
+
+/* ------------------------------------------------------------------
+   One authored moment: hero entrance (respects reduced motion)
+------------------------------------------------------------------- */
+@keyframes sk-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes sk-reveal {
+  from {
+    opacity: 0;
+    clip-path: inset(6% 4% 6% 4% round 1rem);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0 round 1rem);
+  }
+}
+.sk-rise {
+  animation: sk-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.sk-reveal {
+  animation: sk-reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+@keyframes sk-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.sk-marquee-track {
+  animation: sk-marquee 22s linear infinite;
+}
+.sk-marquee {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+.sk-marquee:hover .sk-marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .sk-rise,
+  .sk-reveal,
+  .sk-marquee-track {
+    animation: none;
+  }
+}
