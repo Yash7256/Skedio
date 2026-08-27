@@ -45,6 +45,7 @@
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.5.0",
     "lucide-react": "^0.462.0",
+    "nitro": "^3.0.1-20260826-135133-65a4e394",
     "react": "^19.2.8",
     "react-day-picker": "^9.14.0",
     "react-dom": "^19.2.8",

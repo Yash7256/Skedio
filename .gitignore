@@ -25,6 +25,9 @@ dist-ssr
 __MACOSX
 *.url
 
+# Vercel
+.vercel/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
