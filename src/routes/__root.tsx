@@ -6,6 +6,7 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import appCss from '../styles.css?url'
+import { Footer } from '../components/Footer'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -26,6 +27,7 @@ function RootComponent() {
   return (
     <RootDocument>
       <Outlet />
+      <Footer />
     </RootDocument>
   )
 }
