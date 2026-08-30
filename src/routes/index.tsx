@@ -74,24 +74,6 @@ const insights = [
 
 const clients = ["Social Chums", "Nuvance Technology", "Edios"];
 
-const teamGroups = [
-  {
-    label: "01 — Core Team",
-    members: [
-      { name: "Aakash Choudhary", role: "Founder", img: "/aakash.jpeg" },
-      { name: "Rishabh Agrawal", role: "Manager" },
-    ],
-  },
-  {
-    label: "02 — Craft & Technology",
-    members: [
-      { name: "Harshita Upadhyay", role: "UI UX Lead" },
-      { name: "Shrishti Kori", role: "Graphics Lead" },
-      { name: "Aman Raj", role: "Developer", img: "/aman.jpeg" },
-    ],
-  },
-];
-
 function Wordmark({ className = "" }: { className?: string }) {
   return (
     <img
@@ -132,29 +114,6 @@ function PillLink({
   );
 }
 
-type TeamMember = { name: string; role: string; img?: string };
-
-function TeamCard({ member }: { member: TeamMember }) {
-  return (
-    <div className="group">
-      <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl border border-border bg-surface">
-        {member.img ? (
-          <img
-            src={member.img}
-            alt={member.name}
-            loading="lazy"
-            className="size-full object-cover transition-transform duration-250 ease-out group-hover:-translate-y-1"
-          />
-        ) : (
-          <div className="size-full bg-gradient-to-br from-surface-alt to-primary/30 transition-transform duration-250 ease-out group-hover:-translate-y-1" />
-        )}
-      </div>
-      <h3 className="mt-4 text-base font-semibold">{member.name}</h3>
-      <p className="type-caption mt-1 text-muted-foreground">{member.role}</p>
-    </div>
-  );
-}
-
 function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -164,7 +123,7 @@ function Index() {
           <Wordmark />
           <div className="flex items-center gap-10">
             <ul className="type-label hidden items-center gap-10 uppercase md:flex">
-              {["Work", "Services", "About", "Insights"].map((i) => (
+              {["Work", "Services", "Insights"].map((i) => (
                 <li key={i}>
                   <a
                     href={`#${i.toLowerCase()}`}
@@ -174,6 +133,14 @@ function Index() {
                   </a>
                 </li>
               ))}
+              <li>
+                <a
+                  href="/about"
+                  className="type-body tracking-[0.08em] text-foreground/70 transition-colors duration-200 hover:text-primary"
+                >
+                  About
+                </a>
+              </li>
             </ul>
             <PillLink href="#contact">Let's Talk</PillLink>
           </div>
@@ -348,39 +315,6 @@ function Index() {
                   </span>
                 </div>
               </article>
-            ))}
-          </div>
-        </section>
-
-        {/* Team */}
-        <section id="team" className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 pb-24 lg:pb-32">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Our Team</p>
-              <h2 className="type-h2 mt-5">Meet Our Creative Minds</h2>
-            </div>
-            <PillLink href="#team" variant="outline">
-              Join the Team
-            </PillLink>
-          </div>
-
-          <div className="mt-16 space-y-16 md:space-y-20">
-            {teamGroups.map((group) => (
-              <div key={group.label}>
-                <p className="type-label uppercase tracking-[0.1em] text-muted-foreground">
-                  {group.label}
-                </p>
-                <div className="mt-8 flex flex-wrap justify-center gap-6">
-                  {group.members.map((member) => (
-                    <div
-                      key={member.name}
-                      className="w-full max-w-[240px] sm:w-[calc((100%-2*1.5rem)/3)]"
-                    >
-                      <TeamCard member={member} />
-                    </div>
-                  ))}
-                </div>
-              </div>
             ))}
           </div>
         </section>
