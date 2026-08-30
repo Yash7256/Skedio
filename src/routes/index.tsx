@@ -74,12 +74,22 @@ const insights = [
 
 const clients = ["Social Chums", "Nuvance Technology", "Edios"];
 
-const team = [
-  { name: "Aarav Sharma", role: "Creative Director" },
-  { name: "Mira Kapoor", role: "Brand Strategist" },
-  { name: "Dev Patel", role: "UI/UX Designer" },
-  { name: "Ishita Rao", role: "Product Developer" },
-  { name: "Karan Mehta", role: "Motion Designer" },
+const teamGroups = [
+  {
+    label: "01 — Core Team",
+    members: [
+      { name: "Aakash Choudhary", role: "Founder", img: "/aakash.jpeg" },
+      { name: "Rishabh Agrawal", role: "Manager" },
+    ],
+  },
+  {
+    label: "02 — Craft & Technology",
+    members: [
+      { name: "Harshita Upadhyay", role: "UI UX Lead" },
+      { name: "Shrishti Kori", role: "Graphics Lead" },
+      { name: "Aman Raj", role: "Developer", img: "/aman.jpeg" },
+    ],
+  },
 ];
 
 function Wordmark({ className = "" }: { className?: string }) {
@@ -119,6 +129,29 @@ function PillLink({
         <ArrowUpRight className="size-4" />
       </span>
     </a>
+  );
+}
+
+type TeamMember = { name: string; role: string; img?: string };
+
+function TeamCard({ member }: { member: TeamMember }) {
+  return (
+    <div className="group">
+      <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl border border-border bg-surface">
+        {member.img ? (
+          <img
+            src={member.img}
+            alt={member.name}
+            loading="lazy"
+            className="size-full object-cover transition-transform duration-250 ease-out group-hover:-translate-y-1"
+          />
+        ) : (
+          <div className="size-full bg-gradient-to-br from-surface-alt to-primary/30 transition-transform duration-250 ease-out group-hover:-translate-y-1" />
+        )}
+      </div>
+      <h3 className="mt-4 text-base font-semibold">{member.name}</h3>
+      <p className="type-caption mt-1 text-muted-foreground">{member.role}</p>
+    </div>
   );
 }
 
@@ -238,10 +271,6 @@ function Index() {
                 <div className="p-6">
                   <h3 className="type-h6">{s.title}</h3>
                   <p className="type-sm mt-2.5 text-muted-foreground">{s.body}</p>
-                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                    Explore{" "}
-                    <ArrowRight className="size-4 transition-transform duration-250 ease-out group-hover:translate-x-1" />
-                  </span>
                 </div>
               </article>
             ))}
@@ -335,14 +364,22 @@ function Index() {
             </PillLink>
           </div>
 
-          <div className="mt-12 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
-            {team.map((member) => (
-              <div key={member.name} className="group">
-                <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl border border-border bg-surface">
-                  <div className="size-full bg-gradient-to-br from-surface-alt to-primary/30 transition-transform duration-250 ease-out group-hover:-translate-y-1" />
+          <div className="mt-16 space-y-16 md:space-y-20">
+            {teamGroups.map((group) => (
+              <div key={group.label}>
+                <p className="type-label uppercase tracking-[0.1em] text-muted-foreground">
+                  {group.label}
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-6">
+                  {group.members.map((member) => (
+                    <div
+                      key={member.name}
+                      className="w-full max-w-[240px] sm:w-[calc((100%-2*1.5rem)/3)]"
+                    >
+                      <TeamCard member={member} />
+                    </div>
+                  ))}
                 </div>
-                <h3 className="mt-4 text-base font-semibold">{member.name}</h3>
-                <p className="type-caption mt-1 text-muted-foreground">{member.role}</p>
               </div>
             ))}
           </div>
