@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, ArrowRight, Instagram, Linkedin, Dribbble, Zap } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Instagram, Linkedin, Zap } from "lucide-react";
 
 import hero from "@/assets/hero.png";
 import svcStrategy from "@/assets/svc-strategy.jpg";
@@ -38,23 +38,23 @@ export const Route = createFileRoute("/")({
 const services = [
   {
     title: "Brand Strategy",
-    body: "We uncover insights and build strategies that shape meaningful brand positioning and long-term growth.",
+    body: "Building positioning and strategy that give a brand real direction, not just a look.",
     img: svcStrategy,
   },
   {
-    title: "Identity",
-    body: "We create distinctive brand identities that capture your essence and leave a lasting impression.",
+    title: "Brand Identity",
+    body: "Distinctive visual identities built to be recognized at a glance and remembered long after.",
     img: svcIdentity,
   },
   {
-    title: "Design",
-    body: "From visuals to packaging, we design compelling brand experiences that connect and inspire.",
-    img: svcDesign,
+    title: "UI/UX",
+    body: "Digital experiences built to be intuitive first, beautiful second.",
+    img: svcUiux,
   },
   {
-    title: "UI / UX",
-    body: "We design intuitive digital experiences that are beautiful, functional and user-first.",
-    img: svcUiux,
+    title: "Product Development",
+    body: "End-to-end product development that turns ideas into scalable digital products.",
+    img: svcDesign,
   },
 ];
 
@@ -72,7 +72,15 @@ const insights = [
   { date: "May 05, 2025", title: "Designing Experiences That People Remember", img: insight3 },
 ];
 
-const clients = ["zomato", "ITC", "Cadbury", "CRED", "fnp", "Bingo!", "AASHIRVAAD", "boAt"];
+const clients = ["Social Chums", "Nuvance Technology", "Edios"];
+
+const team = [
+  { name: "Aarav Sharma", role: "Creative Director" },
+  { name: "Mira Kapoor", role: "Brand Strategist" },
+  { name: "Dev Patel", role: "UI/UX Designer" },
+  { name: "Ishita Rao", role: "Product Developer" },
+  { name: "Karan Mehta", role: "Motion Designer" },
+];
 
 function Wordmark({ className = "" }: { className?: string }) {
   return (
@@ -152,7 +160,7 @@ function Index() {
             </h1>
 
             <div className="mt-10 flex flex-wrap items-center gap-3">
-              {["Brand Strategy", "Identity", "Design", "UI / UX"].map((tag) => (
+              {["Brand Strategy", "Brand Identity", "UI/UX Design", "Web Development"].map((tag) => (
                 <span
                   key={tag}
                   className="rounded-md border border-border bg-surface px-4 py-1.5 text-sm font-medium text-foreground/70"
@@ -164,23 +172,23 @@ function Index() {
 
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <PillLink href="#work" variant="ink">
-                View Our Work
+                View our works
               </PillLink>
-              <PillLink href="#services" variant="outline">
-                Explore Services
+              <PillLink href="#contact" variant="outline">
+                Let's Talk
               </PillLink>
             </div>
 
             <p className="mt-8 flex items-center gap-2 text-sm text-muted-foreground">
               <Zap className="size-4 text-primary" />
-              Get a reply within 24 hours
+              Get reply within 36 hours
             </p>
           </div>
 
           {/* Right column (~40%, lower) */}
           <div className="lg:col-span-2">
             <div className="rounded-2xl border border-border bg-surface/60 p-8 lg:p-10">
-              <p className="eyebrow">Trusted by brands we love</p>
+              <p className="eyebrow">Partner with</p>
               <div className="sk-marquee mt-6 overflow-hidden">
                 <div className="sk-marquee-track flex w-max items-center gap-x-10">
                   {[...clients, ...clients].map((c, i) => (
@@ -314,16 +322,56 @@ function Index() {
             ))}
           </div>
         </section>
+
+        {/* Team */}
+        <section id="team" className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 pb-24 lg:pb-32">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="eyebrow">Our Team</p>
+              <h2 className="type-h2 mt-5">Meet Our Creative Minds</h2>
+            </div>
+            <PillLink href="#team" variant="outline">
+              Join the Team
+            </PillLink>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
+            {team.map((member) => (
+              <div key={member.name} className="group">
+                <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl border border-border bg-surface">
+                  <div className="size-full bg-gradient-to-br from-surface-alt to-primary/30 transition-transform duration-250 ease-out group-hover:-translate-y-1" />
+                </div>
+                <h3 className="mt-4 text-base font-semibold">{member.name}</h3>
+                <p className="type-caption mt-1 text-muted-foreground">{member.role}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Clients */}
+        <section id="clients" className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 pb-24 lg:pb-32">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="eyebrow">Clients</p>
+              <h2 className="type-h2 mt-5">Our Clients</h2>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-14 gap-y-10">
+            {clients.map((c) => (
+              <span
+                key={c}
+                className="text-2xl font-bold tracking-tight text-foreground/40 transition-colors duration-300 hover:text-foreground"
+              >
+                {c}
+              </span>
+            ))}
+          </div>
+        </section>
       </div>
 
       {/* Footer */}
       <footer id="contact" className="scroll-mt-24 bg-surface-alt text-white">
-        <div className="overflow-hidden px-2 pt-6 leading-none">
-          <p className="whitespace-nowrap text-center font-display text-[13vw] font-extrabold uppercase leading-[0.8] tracking-tight text-white/[0.06] select-none">
-            SKEDIO
-          </p>
-        </div>
-
         <div className="mx-auto grid w-full max-w-[1200px] gap-14 px-6 py-16 md:py-24 lg:grid-cols-[1.4fr_2.4fr_1.4fr]">
           <div>
             <Wordmark className="brightness-0 invert" />
@@ -332,25 +380,27 @@ function Index() {
               inspire growth.
             </p>
             <div className="mt-7 flex gap-5 text-white/70">
-              <a href="#contact" aria-label="Instagram"><Instagram className="size-5 transition-colors hover:text-primary-light" /></a>
-              <a href="#contact" aria-label="Dribbble"><Dribbble className="size-5 transition-colors hover:text-primary-light" /></a>
               <a href="#contact" aria-label="LinkedIn"><Linkedin className="size-5 transition-colors hover:text-primary-light" /></a>
+              <a href="#contact" aria-label="Instagram"><Instagram className="size-5 transition-colors hover:text-primary-light" /></a>
+              <a href="#contact" aria-label="Behance">
+                <svg className="size-5 transition-colors hover:text-primary-light" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988H0V5.021h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zM3 11h3.584c2.508 0 2.906-3-.312-3H3v3zm3.391 3H3v3.016h3.341c3.055 0 2.868-3.016.05-3.016z"/></svg>
+              </a>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
             {[
               { h: "Company", l: ["About Us", "Our Process", "Careers", "Contact"] },
-              { h: "Services", l: ["Brand Strategy", "Identity", "Design", "UI / UX"] },
-              { h: "Work", l: ["All Projects", "Case Studies", "Clients"] },
-              { h: "Resources", l: ["Blog", "Guides", "News"] },
+              { h: "Services", l: ["Brand Strategy", "Brand Identity", "UI/UX", "Product Development"] },
+              { h: "Work", l: ["Case Studies", "Clients"] },
+              { h: "Resources", l: ["Blogs", "Medium"] },
             ].map((col) => (
               <div key={col.h}>
                 <h4 className="type-label uppercase tracking-[0.08em]">{col.h}</h4>
                 <ul className="mt-5 space-y-3 text-sm text-white/60">
                   {col.l.map((x) => (
                     <li key={x}>
-                      <a href="#contact" className="transition-colors duration-200 hover:text-primary-light">{x}</a>
+                      <a href="#contact" className="whitespace-nowrap transition-colors duration-200 hover:text-primary-light">{x}</a>
                     </li>
                   ))}
                 </ul>
@@ -384,8 +434,18 @@ function Index() {
           </div>
         </div>
 
+        <div className="px-2 leading-none">
+          <img
+            src="/skedio-primary.png"
+            alt="Skédio"
+            width={818}
+            height={297}
+            className="mx-auto -mb-6 w-full max-w-[min(92vw,900px)] brightness-0 invert opacity-[0.06]"
+          />
+        </div>
+
         <div className="border-t border-white/10">
-          <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-3 px-6 py-6 text-xs text-white/50">
+          <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-3 px-6 pt-3 pb-6 text-xs text-white/50">
             <p>© 2025 Skédio. All rights reserved.</p>
             <div className="flex gap-7">
               <a href="#contact" className="transition-colors hover:text-white">Privacy Policy</a>
