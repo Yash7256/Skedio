@@ -8,13 +8,13 @@ const teamGroups = [
     label: "01 — Core Team",
     members: [
       { name: "Aakash Choudhary", role: "Founder", img: "/aakash.jpeg" },
-      { name: "Rishabh Agrawal", role: "Manager" },
+      { name: "Rishabh Khatri", role: "Manager" },
     ],
   },
   {
     label: "02 — Craft & Technology",
     members: [
-      { name: "Harshita Upadhyay", role: "UI UX Lead" },
+      { name: "Harshita Upadhyay", role: "UI UX Lead", img: "/harshita.jpeg" },
       { name: "Shrishti Kori", role: "Graphics Lead" },
       { name: "Aman Raj", role: "Developer", img: "/aman.jpeg" },
     ],
