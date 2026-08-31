@@ -1,4 +1,6 @@
-import { ArrowUpRight, Instagram, Linkedin } from "lucide-react";
+import { ArrowUpRight, Instagram, Linkedin, Check } from "lucide-react";
+import { useState } from "react";
+import { useContactModal } from "@/context/contact-modal-context";
 
 function Wordmark({ className = "" }: { className?: string }) {
   return (
@@ -20,6 +22,36 @@ const columns = [
 ];
 
 export function Footer() {
+  const { openContactModal } = useContactModal();
+  const [footerEmail, setFooterEmail] = useState("");
+  const [footerSent, setFooterSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleFooterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!footerEmail) return;
+    setLoading(true);
+
+    try {
+      await fetch("https://formsubmit.co/ajax/skediodesignspace@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          email: footerEmail,
+          message: "Lead submitted via Footer newsletter / quick inquiry",
+          _subject: `New Lead Email: ${footerEmail} (Skedio Studio)`,
+        }),
+      });
+      setFooterSent(true);
+      setFooterEmail("");
+    } catch {
+      setFooterSent(true);
+      setFooterEmail("");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <footer id="contact" className="scroll-mt-24 bg-surface-alt text-white">
       <div className="mx-auto grid w-full max-w-[1200px] gap-14 px-6 py-16 md:py-24 lg:grid-cols-[1.4fr_2.4fr_1.4fr]">
@@ -45,7 +77,17 @@ export function Footer() {
               <ul className="mt-5 space-y-3 text-sm text-white/60">
                 {col.l.map((x) => (
                   <li key={x}>
-                    <a href="#contact" className="whitespace-nowrap transition-colors duration-200 hover:text-primary-light">{x}</a>
+                    {x === "Contact" ? (
+                      <button
+                        type="button"
+                        onClick={openContactModal}
+                        className="cursor-pointer whitespace-nowrap transition-colors duration-200 hover:text-primary-light"
+                      >
+                        {x}
+                      </button>
+                    ) : (
+                      <a href="#contact" className="whitespace-nowrap transition-colors duration-200 hover:text-primary-light">{x}</a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -57,25 +99,36 @@ export function Footer() {
           <h4 className="type-h6">Let's create something great</h4>
           <p className="type-sm mt-5 text-white/60">hello@skedio.studio</p>
           <p className="type-sm text-white/60">+91 98765 43210</p>
-          <form
-            className="mt-6 flex items-center gap-2 rounded-full border border-white/15 bg-white/10 p-1.5 pl-5 backdrop-blur-sm"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="email"
-              required
-              placeholder="Enter your email"
-              aria-label="Email address"
-              className="type-sm min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-white/45"
-            />
-            <button
-              type="submit"
-              aria-label="Subscribe"
-              className="group grid size-9 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition-colors duration-250 hover:bg-primary-hover"
+          {footerSent ? (
+            <div className="mt-6 flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-5 py-3 text-sm font-semibold text-emerald-400">
+              <Check className="size-4" />
+              <span>Sent</span>
+            </div>
+          ) : (
+            <form
+              className="mt-6 flex items-center gap-2 rounded-full border border-white/15 bg-white/10 p-1.5 pl-5 backdrop-blur-sm"
+              onSubmit={handleFooterSubmit}
             >
-              <ArrowUpRight className="size-4 transition-transform duration-250 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </button>
-          </form>
+              <input
+                type="email"
+                required
+                placeholder="Enter your email"
+                aria-label="Email address"
+                value={footerEmail}
+                onChange={(e) => setFooterEmail(e.target.value)}
+                disabled={loading}
+                className="type-sm min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-white/45"
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                aria-label="Subscribe"
+                className="group grid size-9 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition-colors duration-250 hover:bg-primary-hover cursor-pointer"
+              >
+                <ArrowUpRight className="size-4 transition-transform duration-250 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+            </form>
+          )}
         </div>
       </div>
 

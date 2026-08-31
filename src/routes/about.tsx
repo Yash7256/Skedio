@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ScrollReveal } from "@/hooks/use-scroll-animation";
+import { useContactModal } from "@/context/contact-modal-context";
 
 type TeamMember = { name: string; role: string; img?: string };
 
@@ -66,6 +67,8 @@ function TeamCard({ member }: { member: TeamMember }) {
 }
 
 function About() {
+  const { openContactModal } = useContactModal();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -88,12 +91,13 @@ function About() {
                 <span className="type-body tracking-[0.08em] text-primary">About</span>
               </li>
             </ul>
-            <Link
-              to="/"
-              className="group type-button inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-primary-foreground transition-colors duration-250 ease-out hover:bg-primary-hover"
+            <button
+              type="button"
+              onClick={openContactModal}
+              className="group type-button inline-flex cursor-pointer items-center gap-2 rounded-full bg-primary px-6 py-3 text-primary-foreground transition-colors duration-250 ease-out hover:bg-primary-hover"
             >
               Let's Talk
-            </Link>
+            </button>
           </div>
         </nav>
       </header>

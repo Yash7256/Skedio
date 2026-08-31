@@ -151,9 +151,6 @@
   html {
     /* Native smooth-scroll removed — handled by SmoothScroll JS engine for 120fps */
     scroll-behavior: auto;
-    /* Force GPU compositing layer on the root for buttery scrolling */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
   }
   body {
     @apply bg-background text-foreground font-sans;

@@ -9,6 +9,8 @@ import {
 import appCss from '../styles.css?url'
 import { Footer } from '../components/Footer'
 import { smoothScroll } from '../lib/smooth-scroll'
+import { ContactModalProvider } from '../context/contact-modal-context'
+import { ContactModal } from '../components/ContactModal'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -35,8 +37,11 @@ function RootComponent() {
 
   return (
     <RootDocument>
-      <Outlet />
-      {!pathname.startsWith('/projects') && <Footer />}
+      <ContactModalProvider>
+        <Outlet />
+        <ContactModal />
+        {!pathname.startsWith('/projects') && <Footer />}
+      </ContactModalProvider>
     </RootDocument>
   )
 }

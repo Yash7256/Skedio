@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, ArrowRight, Zap } from "lucide-react";
 import { ScrollReveal } from "@/hooks/use-scroll-animation";
+import { useContactModal } from "@/context/contact-modal-context";
 
 import hero from "@/assets/hero.png";
 import svcStrategy from "@/assets/svc-strategy.jpg";
@@ -90,10 +91,12 @@ function Wordmark({ className = "" }: { className?: string }) {
 
 function PillLink({
   href,
+  onClick,
   children,
   variant = "solid",
 }: {
-  href: string;
+  href?: string;
+  onClick?: () => void;
   children: React.ReactNode;
   variant?: "solid" | "ink" | "outline";
 }) {
@@ -103,20 +106,26 @@ function PillLink({
       : variant === "ink"
         ? "bg-ink text-ink-foreground hover:bg-primary"
         : "bg-primary text-primary-foreground hover:bg-primary-hover";
+
+  const Comp = onClick ? "button" : "a";
+  const props = onClick ? { type: "button" as const, onClick } : { href };
+
   return (
-    <a
-      href={href}
-      className={`group type-button inline-flex items-center gap-2 rounded-full px-6 py-3 transition-colors duration-250 ease-out ${styles}`}
+    <Comp
+      {...props}
+      className={`group type-button inline-flex cursor-pointer items-center gap-2 rounded-full px-6 py-3 transition-colors duration-250 ease-out ${styles}`}
     >
       {children}
       <span className="grid size-8 place-items-center rounded-full bg-foreground/10 transition-transform duration-250 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
         <ArrowUpRight className="size-4" />
       </span>
-    </a>
+    </Comp>
   );
 }
 
 function Index() {
+  const { openContactModal } = useContactModal();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -144,7 +153,7 @@ function Index() {
                 </a>
               </li>
             </ul>
-            <PillLink href="#contact">Let's Talk</PillLink>
+            <PillLink onClick={openContactModal}>Let's Talk</PillLink>
           </div>
         </nav>
       </header>
@@ -176,7 +185,7 @@ function Index() {
               <PillLink href="#work" variant="ink">
                 View our works
               </PillLink>
-              <PillLink href="#contact" variant="outline">
+              <PillLink onClick={openContactModal} variant="outline">
                 Let's Talk
               </PillLink>
             </div>
