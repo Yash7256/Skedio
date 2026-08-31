@@ -193,16 +193,21 @@ function Index() {
               <p className="eyebrow">Partner with</p>
               <div className="sk-marquee mt-6 overflow-hidden">
                 <div className="sk-marquee-track flex w-max items-center gap-x-10">
-                  {[...clientLogos, ...clientLogos].map((c, i) => (
+                  {[
+                    { type: "text" as const, id: "sc", label: "Social Chums" },
+                    { type: "text" as const, id: "nt", label: "Nuvance Technology" },
+                    { type: "text" as const, id: "ed", label: "Edios" },
+                    { type: "text" as const, id: "sc2", label: "Social Chums" },
+                    { type: "text" as const, id: "nt2", label: "Nuvance Technology" },
+                    { type: "text" as const, id: "ed2", label: "Edios" },
+                  ].map((item, i) => (
                     <div
-                      key={`${c.id}-${i}`}
-                      className="flex h-12 w-28 shrink-0 items-center justify-center"
+                      key={`${item.id}-${i}`}
+                      className="flex h-auto shrink-0 items-center justify-center px-2 py-2"
                     >
-                      <img
-                        src={c.src}
-                        alt={c.alt}
-                        className="max-h-10 w-auto max-w-full object-contain opacity-50 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
-                      />
+                      <span className="whitespace-nowrap font-display text-xl font-bold tracking-tight text-foreground/50 transition-colors duration-300 hover:text-foreground">
+                        {item.label}
+                      </span>
                     </div>
                   ))}
                 </div>
