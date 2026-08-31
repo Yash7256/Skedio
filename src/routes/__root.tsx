@@ -1,12 +1,14 @@
-import type { ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import {
   HeadContent,
   Outlet,
   Scripts,
   createRootRoute,
+  useRouterState,
 } from '@tanstack/react-router'
 import appCss from '../styles.css?url'
 import { Footer } from '../components/Footer'
+import { smoothScroll } from '../lib/smooth-scroll'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -24,10 +26,17 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+
+  useEffect(() => {
+    smoothScroll.init()
+    return () => smoothScroll.destroy()
+  }, [])
+
   return (
     <RootDocument>
       <Outlet />
-      <Footer />
+      {!pathname.startsWith('/projects') && <Footer />}
     </RootDocument>
   )
 }

@@ -1,16 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, ArrowRight, Zap } from "lucide-react";
+import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 import hero from "@/assets/hero.png";
 import svcStrategy from "@/assets/svc-strategy.jpg";
 import svcIdentity from "@/assets/svc-identity.jpg";
 import svcDesign from "@/assets/svc-design.jpg";
 import svcUiux from "@/assets/svc-uiux.jpg";
-import workFibe from "@/assets/work-fibe.jpg";
-import workAashirvaad from "@/assets/work-aashirvaad.jpg";
-import workForest from "@/assets/work-forest.jpg";
-import workTwig from "@/assets/work-twig.jpg";
-import workBingo from "@/assets/work-bingo.jpg";
 import insight1 from "@/assets/insight-1.jpg";
 import insight2 from "@/assets/insight-2.jpg";
 import insight3 from "@/assets/insight-3.jpg";
@@ -59,11 +55,13 @@ const services = [
 ];
 
 const projects = [
-  { name: "Fibe", line: "Banking made effortless.", tag: "UI/UX Design", img: workFibe },
-  { name: "Aashirvaad", line: "Packaging Redesign", tag: "Branding, Packaging", img: workAashirvaad },
-  { name: "Forest Essentials", line: "Luxury Skincare Reimagined", tag: "Branding, Packaging", img: workForest },
-  { name: "Twig", line: "Shopping made simple.", tag: "UI/UX Design", img: workTwig },
-  { name: "Bingo!", line: "Bold. Fun. Unsstoppable.", tag: "Packaging Design", img: workBingo },
+  {
+    name: "HAO Cabs",
+    slug: "haocabs",
+    line: "A Taxi Bidding Experience App",
+    tag: "Product Design, UI/UX",
+    img: "/HaoCabs/cover.png",
+  },
 ];
 
 const insights = [
@@ -72,7 +70,11 @@ const insights = [
   { date: "May 05, 2025", title: "Designing Experiences That People Remember", img: insight3 },
 ];
 
-const clients = ["Social Chums", "Nuvance Technology", "Edios"];
+const clientLogos = Array.from({ length: 14 }, (_, i) => ({
+  id: i + 1,
+  src: `/Clients/${i + 1}.png`,
+  alt: `Client logo ${i + 1}`,
+}));
 
 function Wordmark({ className = "" }: { className?: string }) {
   return (
@@ -191,13 +193,17 @@ function Index() {
               <p className="eyebrow">Partner with</p>
               <div className="sk-marquee mt-6 overflow-hidden">
                 <div className="sk-marquee-track flex w-max items-center gap-x-10">
-                  {[...clients, ...clients].map((c, i) => (
-                    <span
-                      key={`${c}-${i}`}
-                      className="whitespace-nowrap font-display text-lg font-bold text-foreground/35 transition-colors duration-300 hover:text-foreground"
+                  {[...clientLogos, ...clientLogos].map((c, i) => (
+                    <div
+                      key={`${c.id}-${i}`}
+                      className="flex h-12 w-28 shrink-0 items-center justify-center"
                     >
-                      {c}
-                    </span>
+                      <img
+                        src={c.src}
+                        alt={c.alt}
+                        className="max-h-10 w-auto max-w-full object-contain opacity-50 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
+                      />
+                    </div>
                   ))}
                 </div>
               </div>
@@ -218,124 +224,162 @@ function Index() {
       <div className="bg-background">
         {/* Services */}
         <section id="services" className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 py-24 lg:py-28">
-          <p className="eyebrow">What we do</p>
-          <h2 className="type-h2 mt-5">Services that drive brands forward</h2>
+          <ScrollReveal>
+            <p className="eyebrow">What we do</p>
+            <h2 className="type-h2 mt-5">Services that drive brands forward</h2>
+          </ScrollReveal>
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((s) => (
-              <article
-                key={s.title}
-                className="group overflow-hidden rounded-xl border border-border bg-card shadow-card transition-[transform,box-shadow] duration-250 ease-out hover:-translate-y-1 hover:shadow-card-hover"
-              >
-                <img
-                  src={s.img}
-                  alt={s.title}
-                  loading="lazy"
-                  width={700}
-                  height={560}
-                  className="h-48 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                />
-                <div className="p-6">
-                  <h3 className="type-h6">{s.title}</h3>
-                  <p className="type-sm mt-2.5 text-muted-foreground">{s.body}</p>
-                </div>
-              </article>
+            {services.map((s, idx) => (
+              <ScrollReveal key={s.title} delay={idx}>
+                <article
+                  className="group overflow-hidden rounded-xl border border-border bg-card shadow-card transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-card-hover"
+                >
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    loading="lazy"
+                    width={700}
+                    height={560}
+                    className="h-48 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                  />
+                  <div className="p-6">
+                    <h3 className="type-h6">{s.title}</h3>
+                    <p className="type-sm mt-2.5 text-muted-foreground">{s.body}</p>
+                  </div>
+                </article>
+              </ScrollReveal>
             ))}
           </div>
         </section>
 
         {/* Work */}
         <section id="work" className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 pb-24 lg:pb-28">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Our work</p>
-              <h2 className="type-h2 mt-5">Projects that speak for us</h2>
+          <ScrollReveal>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <p className="eyebrow">Featured project</p>
+                <h2 className="type-h2 mt-5">Selected work</h2>
+              </div>
+              <PillLink href="/projects/haocabs" variant="outline">
+                Explore Case Study
+              </PillLink>
             </div>
-            <PillLink href="#work" variant="outline">
-              View All Projects
-            </PillLink>
-          </div>
+          </ScrollReveal>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-12">
             {projects.map((p) => (
-              <article
-                key={p.name}
-                className="group relative overflow-hidden rounded-xl bg-ink transition-transform duration-250 ease-out hover:-translate-y-1"
-              >
-                <img
-                  src={p.img}
-                  alt={`${p.name} project`}
-                  loading="lazy"
-                  width={640}
-                  height={900}
-                  className="h-96 w-full object-cover opacity-90 transition-all duration-500 ease-out group-hover:scale-105 group-hover:opacity-100"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                  <h3 className="font-display text-xl font-bold">{p.name}</h3>
-                  <p className="type-sm mt-1 text-white/75">{p.line}</p>
-                  <p className="type-caption mt-5 uppercase tracking-[0.14em] text-white/60">
-                    {p.tag}
-                  </p>
-                </div>
-              </article>
+              <ScrollReveal key={p.name} delay={1}>
+                <Link
+                  to="/projects/$slug"
+                  params={{ slug: p.slug }}
+                  className="group relative block overflow-hidden rounded-2xl bg-ink shadow-2xl transition-transform duration-300 ease-out hover:-translate-y-1.5"
+                >
+                  <div className="relative aspect-[16/9] w-full overflow-hidden sm:aspect-[21/9]">
+                    <img
+                      src={p.img}
+                      alt={`${p.name} project`}
+                      loading="lazy"
+                      width={1600}
+                      height={900}
+                      className="h-full w-full object-cover opacity-90 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 p-8 text-white sm:p-12">
+                      <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                          <div className="flex items-center gap-3">
+                            <h3 className="font-display text-2xl font-bold sm:text-4xl">{p.name}</h3>
+                            <span className="rounded-full bg-[#FFC400] px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-black">
+                              Case Study
+                            </span>
+                          </div>
+                          <p className="type-base mt-2 text-white/80 sm:text-lg">{p.line}</p>
+                        </div>
+                        <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white backdrop-blur-md transition-colors duration-250 ease-out group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
+                          View Project <ArrowUpRight size={16} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
         </section>
 
         {/* Insights */}
         <section id="insights" className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 pb-24 lg:pb-32">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Insights</p>
-              <h2 className="type-h2 mt-5">Read our latest thoughts</h2>
+          <ScrollReveal>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <p className="eyebrow">Insights</p>
+                <h2 className="type-h2 mt-5">Read our latest thoughts</h2>
+              </div>
+              <PillLink href="#insights" variant="outline">
+                View All Insights
+              </PillLink>
             </div>
-            <PillLink href="#insights" variant="outline">
-              View All Insights
-            </PillLink>
-          </div>
+          </ScrollReveal>
 
           <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {insights.map((n) => (
-              <article key={n.title} className="group flex cursor-pointer gap-5">
-                <img
-                  src={n.img}
-                  alt={n.title}
-                  loading="lazy"
-                  width={560}
-                  height={560}
-                  className="size-32 shrink-0 rounded-xl object-cover transition-transform duration-250 ease-out group-hover:-translate-y-1"
-                />
-                <div>
-                  <p className="type-caption text-muted-foreground">{n.date}</p>
-                  <h3 className="mt-2 text-base font-semibold leading-snug">{n.title}</h3>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                    Read More{" "}
-                    <ArrowRight className="size-4 transition-transform duration-250 ease-out group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </article>
+            {insights.map((n, idx) => (
+              <ScrollReveal key={n.title} delay={idx}>
+                <article className="group flex cursor-pointer gap-5">
+                  <img
+                    src={n.img}
+                    alt={n.title}
+                    loading="lazy"
+                    width={560}
+                    height={560}
+                    className="size-32 shrink-0 rounded-xl object-cover transition-transform duration-250 ease-out group-hover:-translate-y-1"
+                  />
+                  <div>
+                    <p className="type-caption text-muted-foreground">{n.date}</p>
+                    <h3 className="mt-2 text-base font-semibold leading-snug">{n.title}</h3>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                      Read More{" "}
+                      <ArrowRight className="size-4 transition-transform duration-250 ease-out group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                </article>
+              </ScrollReveal>
             ))}
           </div>
         </section>
 
         {/* Clients */}
-        <section id="clients" className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 pb-24 lg:pb-32">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Clients</p>
-              <h2 className="type-h2 mt-5">Our Clients</h2>
+        <section id="clients" className="mx-auto w-full max-w-[1360px] scroll-mt-24 px-6 pb-28 lg:pb-36">
+          <ScrollReveal>
+            <div className="mb-14 lg:mb-20">
+              <h2 className="font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+                Clients
+              </h2>
+              <div className="mt-3 flex items-center gap-6">
+                <p className="type-body text-muted-foreground sm:text-lg">
+                  We'll let the brands speak for us
+                </p>
+                <div className="h-px flex-1 max-w-sm bg-border/80" />
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-14 gap-y-10">
-            {clients.map((c) => (
-              <span
-                key={c}
-                className="text-2xl font-bold tracking-tight text-foreground/40 transition-colors duration-300 hover:text-foreground"
+          <div className="grid grid-cols-2 items-center justify-items-center gap-x-12 gap-y-16 sm:grid-cols-3 sm:gap-x-16 sm:gap-y-20 md:grid-cols-4 lg:grid-cols-4">
+            {clientLogos.map((c, idx) => (
+              <ScrollReveal
+                key={c.id}
+                delay={idx % 4}
+                className="flex h-32 w-full items-center justify-center p-3 sm:h-36 lg:h-44"
               >
-                {c}
-              </span>
+                <img
+                  src={c.src}
+                  alt={c.alt}
+                  loading="lazy"
+                  width={360}
+                  height={180}
+                  className="max-h-24 w-auto max-w-[240px] cursor-pointer object-contain grayscale opacity-60 transition-all duration-300 ease-out hover:scale-110 hover:opacity-100 hover:grayscale-0 sm:max-h-28 sm:max-w-[280px] lg:max-h-36 lg:max-w-[320px]"
+                />
+              </ScrollReveal>
             ))}
           </div>
         </section>

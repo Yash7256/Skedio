@@ -149,13 +149,19 @@
     @apply border-border outline-ring/50;
   }
   html {
-    scroll-behavior: smooth;
+    /* Native smooth-scroll removed — handled by SmoothScroll JS engine for 120fps */
+    scroll-behavior: auto;
+    /* Force GPU compositing layer on the root for buttery scrolling */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
   body {
     @apply bg-background text-foreground font-sans;
     letter-spacing: -0.04em; /* Montserrat/UI tracking per brief §4 (em-based so it scales) */
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Prevent layout thrash from scrollbar appearing/disappearing */
+    scrollbar-gutter: stable;
   }
   h1,
   h2,
@@ -174,8 +180,10 @@
   ::placeholder {
     color: var(--sk-gray-muted);
   }
-  ::caret-color {
-    color: var(--sk-purple);
+  input,
+  textarea,
+  [contenteditable] {
+    caret-color: var(--sk-purple);
   }
   :focus-visible {
     outline: 2px solid var(--sk-purple);
@@ -197,6 +205,7 @@
     background: transparent;
   }
 }
+
 
 /* ------------------------------------------------------------------
    Responsive type scale — clamp() anchored to brief §3.2 values:
@@ -277,6 +286,20 @@
 }
 
 /* ------------------------------------------------------------------
+   Performance: GPU compositing & content-visibility
+   Off-screen sections skip paint until near viewport → faster FPS
+------------------------------------------------------------------- */
+section[id] {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+img {
+  /* GPU-composited layer hint for images during scroll */
+  transform: translateZ(0);
+}
+
+/* ------------------------------------------------------------------
    One authored moment: hero entrance (respects reduced motion)
 ------------------------------------------------------------------- */
 @keyframes sk-rise {
@@ -307,14 +330,15 @@
 }
 @keyframes sk-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 .sk-marquee-track {
-  animation: sk-marquee 22s linear infinite;
+  animation: sk-marquee 25s linear infinite;
+  will-change: transform;
 }
 .sk-marquee {
   -webkit-mask-image: linear-gradient(
@@ -335,13 +359,64 @@
 .sk-marquee:hover .sk-marquee-track {
   animation-play-state: paused;
 }
+
+/* ------------------------------------------------------------------
+   120fps Hardware-Accelerated Scroll Reveals
+------------------------------------------------------------------- */
+.sk-reveal-base {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.sk-reveal-up {
+  transform: translate3d(0, 32px, 0);
+}
+
+.sk-reveal-left {
+  transform: translate3d(-32px, 0, 0);
+}
+
+.sk-reveal-right {
+  transform: translate3d(32px, 0, 0);
+}
+
+.sk-reveal-fade {
+  transform: translate3d(0, 0, 0) scale(0.97);
+}
+
+.sk-reveal-base.sk-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Subtle magnetic / fluid card transitions */
+.sk-card-interactive {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.sk-card-interactive:hover {
+  transform: translate3d(0, -6px, 0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .sk-rise,
   .sk-reveal,
-  .sk-marquee-track {
-    animation: none;
+  .sk-marquee-track,
+  .sk-reveal-base {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

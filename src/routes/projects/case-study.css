@@ -1,0 +1,975 @@
+/* ==========================================================================
+   HAO Cabs Case Study — Editorial Stylesheet
+   Art-directed long-form case study inspired by Confetti AIM
+   ========================================================================== */
+
+:root {
+  --cs-yellow: #FFC400;
+  --cs-yellow-hover: #E5B000;
+  --cs-yellow-subtle: #FFFBEA;
+  --cs-black: #111111;
+  --cs-dark-surface: #181818;
+  --cs-dark-border: rgba(255, 255, 255, 0.12);
+  --cs-dark-muted: rgba(255, 255, 255, 0.65);
+  --cs-white: #FFFFFF;
+  --cs-gray-light: #F7F7F5;
+  --cs-gray-border: rgba(17, 17, 17, 0.08);
+  --cs-gray-muted: #555555;
+  --cs-container: 1360px;
+}
+
+/* ------------------------- Core Reset & Baseline ------------------------- */
+
+.cs {
+  background-color: var(--cs-white);
+  color: var(--cs-black);
+  font-family: var(--font-heading, "Gilroy", "Plus Jakarta Sans", sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.cs * {
+  box-sizing: border-box;
+}
+
+/* ------------------------- Typography System ----------------------------- */
+
+.cs-display {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.cs-accent {
+  color: var(--cs-yellow);
+}
+
+.cs-kicker {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cs-gray-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cs-kicker--solid {
+  color: var(--cs-black);
+  margin-bottom: 24px;
+}
+
+.cs-kicker--dark {
+  color: var(--cs-yellow);
+}
+
+.cs-lede {
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: clamp(1.125rem, 1.45vw, 1.35rem);
+  line-height: 1.7;
+  color: var(--cs-gray-muted);
+  font-weight: 400;
+  max-width: 640px;
+}
+
+.cs-lede--muted {
+  color: var(--cs-dark-muted);
+}
+
+/* ------------------------- Reveal Animations ----------------------------- */
+
+.cs-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.cs-reveal.is-inview {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cs-reveal[data-delay="1"] {
+  transition-delay: 0.12s;
+}
+
+.cs-reveal[data-delay="2"] {
+  transition-delay: 0.24s;
+}
+
+.cs-reveal[data-delay="3"] {
+  transition-delay: 0.36s;
+}
+
+.cs-reveal[data-delay="4"] {
+  transition-delay: 0.48s;
+}
+
+/* ------------------------- Sticky Minimal Navbar ------------------------- */
+
+.cs-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 36px;
+  background: transparent;
+  transition: background 0.35s ease, padding 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+.cs-nav--scrolled {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 16px 36px;
+  border-bottom: 1px solid var(--cs-gray-border);
+}
+
+.cs-nav__brand {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--cs-black);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.2s ease;
+}
+
+.cs-nav__brand:hover {
+  opacity: 0.7;
+}
+
+.cs-nav__chapters {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.cs-nav__chapter-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(17, 17, 17, 0.4);
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.cs-nav__chapter-btn:hover {
+  color: var(--cs-black);
+}
+
+.cs-nav__chapter-btn.is-active {
+  color: var(--cs-black);
+  font-weight: 800;
+  border-bottom: 2px solid var(--cs-yellow);
+}
+
+.cs-nav__link {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--cs-black);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.cs-nav__link:hover {
+  opacity: 0.7;
+  transform: translateX(-2px);
+}
+
+/* ------------------------- Section Shell --------------------------------- */
+
+.cs-section {
+  position: relative;
+  width: 100%;
+  padding: clamp(96px, 12vw, 180px) 0;
+}
+
+.cs-section-inner {
+  width: 100%;
+  max-width: var(--cs-container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.cs-sechead {
+  margin-bottom: clamp(36px, 5vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--cs-gray-border);
+  padding-bottom: 20px;
+}
+
+/* ------------------------- Cover / Intro Section ------------------------- */
+
+.cs-cover {
+  padding-top: clamp(140px, 18vh, 220px);
+  padding-bottom: clamp(60px, 8vh, 100px);
+  max-width: var(--cs-container);
+  margin: 0 auto;
+  padding-left: clamp(20px, 5vw, 48px);
+  padding-right: clamp(20px, 5vw, 48px);
+}
+
+.cs-cover__word {
+  font-size: clamp(4rem, 14vw, 13.5rem);
+  line-height: 0.88;
+  color: var(--cs-black);
+  letter-spacing: -0.045em;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: clamp(40px, 6vw, 72px);
+}
+
+.cs-cover__word .row--accent {
+  color: var(--cs-yellow);
+}
+
+.cs-cover__meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 40px;
+  align-items: start;
+  border-top: 1px solid var(--cs-gray-border);
+  padding-top: 36px;
+  margin-bottom: 48px;
+}
+
+.cs-cover__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+}
+
+.cs-cover__fact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cs-cover__fact-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cs-gray-muted);
+}
+
+.cs-cover__fact-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cs-black);
+}
+
+.cs-cover__sub {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: clamp(1.85rem, 3.4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--cs-black);
+}
+
+.cs-cover__scroll-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+.cs-cover__scroll {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--cs-black);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.cs-cover__scroll:hover {
+  transform: translateY(4px);
+  color: var(--cs-yellow-hover);
+}
+
+.cs-cover__art {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto clamp(60px, 8vw, 100px);
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+.cs-cover__art-inner {
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--cs-gray-light);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
+  aspect-ratio: 16 / 9.5;
+  position: relative;
+}
+
+.cs-cover__art-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ------------------------- Section 01: Overview ------------------------- */
+
+.cs-overview {
+  background: var(--cs-white);
+}
+
+.cs-overview__index {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cs-overview__index li {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cs-gray-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cs-overview__index li span {
+  color: var(--cs-black);
+  font-weight: 800;
+}
+
+.cs-overview__head {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(36px, 6vw, 80px);
+  align-items: start;
+  margin-bottom: clamp(60px, 8vw, 100px);
+}
+
+.cs-overview__headline {
+  font-size: clamp(2.5rem, 5.2vw, 5.25rem);
+  line-height: 0.95;
+  color: var(--cs-black);
+}
+
+.cs-overview__visual {
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--cs-gray-light);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+}
+
+.cs-overview__visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ------------------------- Section 02: Challenges ----------------------- */
+
+.cs-challenge {
+  background: var(--cs-black);
+  color: var(--cs-white);
+}
+
+.cs-challenge .cs-sechead {
+  border-bottom: 1px solid var(--cs-dark-border);
+}
+
+.cs-challenge__row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(36px, 6vw, 80px);
+  align-items: start;
+  margin-bottom: clamp(60px, 8vw, 96px);
+}
+
+.cs-challenge__headline {
+  font-size: clamp(2.5rem, 5.2vw, 5.25rem);
+  line-height: 0.95;
+  color: var(--cs-white);
+}
+
+.cs-problem-words {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: clamp(32px, 5vw, 64px) 0;
+  border-top: 1px solid var(--cs-dark-border);
+  border-bottom: 1px solid var(--cs-dark-border);
+  margin-bottom: clamp(60px, 8vw, 100px);
+}
+
+.cs-problem-word {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: clamp(1.8rem, 4.2vw, 4.2rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 0.4s ease, transform 0.4s ease;
+}
+
+.cs-problem-word:hover {
+  color: var(--cs-yellow);
+  transform: translateY(-4px);
+}
+
+.cs-problem-word strong {
+  display: block;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.cs-bid-stage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 3.5vw, 40px);
+  align-items: center;
+  position: relative;
+  padding-top: 20px;
+}
+
+.cs-phone-card {
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--cs-dark-surface);
+  border: 1px solid var(--cs-dark-border);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+}
+
+.cs-phone-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 32px 80px rgba(255, 196, 0, 0.15);
+}
+
+.cs-phone-card--offset-up {
+  transform: translateY(-24px);
+}
+
+.cs-phone-card--offset-down {
+  transform: translateY(24px);
+}
+
+.cs-phone-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ------------------------- Section 03: Process -------------------------- */
+
+.cs-process {
+  background: var(--cs-gray-light);
+}
+
+.cs-process__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(36px, 6vw, 80px);
+  align-items: start;
+  margin-bottom: clamp(60px, 8vw, 96px);
+}
+
+.cs-process__headline {
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
+  line-height: 0.96;
+  color: var(--cs-black);
+}
+
+.cs-timeline {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: clamp(60px, 8vw, 100px);
+  border-top: 2px solid var(--cs-black);
+}
+
+.cs-timeline__row {
+  display: grid;
+  grid-template-columns: 120px 240px 1fr;
+  gap: 32px;
+  align-items: baseline;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--cs-gray-border);
+  transition: background 0.3s ease, padding-left 0.3s ease;
+}
+
+.cs-timeline__row:hover {
+  background: rgba(255, 196, 0, 0.08);
+  padding-left: 16px;
+}
+
+.cs-timeline__num {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--cs-black);
+}
+
+.cs-timeline__title {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--cs-black);
+}
+
+.cs-timeline__desc {
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 16px;
+  color: var(--cs-gray-muted);
+}
+
+.cs-process__visual {
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--cs-white);
+  border: 1px solid var(--cs-gray-border);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+}
+
+.cs-process__visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ------------------------- Section 04: Personas ------------------------- */
+
+.cs-personas {
+  background: var(--cs-white);
+}
+
+.cs-personas__head {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(36px, 6vw, 80px);
+  align-items: start;
+  margin-bottom: clamp(60px, 8vw, 100px);
+}
+
+.cs-personas__headline {
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
+  line-height: 0.96;
+  color: var(--cs-black);
+}
+
+.cs-persona {
+  border-radius: 32px;
+  padding: clamp(40px, 6vw, 80px);
+  margin-bottom: clamp(48px, 6vw, 80px);
+  position: relative;
+  overflow: hidden;
+}
+
+.cs-persona--rider {
+  background: var(--cs-yellow-subtle);
+  border: 1px solid rgba(255, 196, 0, 0.3);
+}
+
+.cs-persona--driver {
+  background: var(--cs-black);
+  color: var(--cs-white);
+}
+
+.cs-persona__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  border-bottom: 2px solid;
+  padding-bottom: 24px;
+}
+
+.cs-persona--rider .cs-persona__header {
+  border-color: var(--cs-black);
+}
+
+.cs-persona--driver .cs-persona__header {
+  border-color: var(--cs-dark-border);
+}
+
+.cs-persona__name {
+  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.cs-persona__role {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cs-gray-muted);
+}
+
+.cs-persona--driver .cs-persona__role {
+  color: var(--cs-yellow);
+}
+
+.cs-persona__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+
+.cs-persona--driver .cs-persona__grid {
+  grid-template-columns: 1.3fr 1fr;
+}
+
+.cs-persona__points {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cs-persona__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cs-persona--rider .cs-persona__pill {
+  background: var(--cs-white);
+  color: var(--cs-black);
+  border: 1px solid var(--cs-gray-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.cs-persona--driver .cs-persona__pill {
+  background: var(--cs-dark-surface);
+  color: var(--cs-white);
+  border: 1px solid var(--cs-dark-border);
+}
+
+.cs-persona__stage {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  align-items: center;
+}
+
+.cs-persona__phone-frame {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s ease;
+}
+
+.cs-persona__phone-frame:hover {
+  transform: scale(1.02);
+}
+
+.cs-persona__phone-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ------------------------- Section 05: Final Experience ------------------ */
+
+.cs-final {
+  background: var(--cs-yellow);
+  color: var(--cs-black);
+}
+
+.cs-final .cs-sechead {
+  border-bottom: 2px solid var(--cs-black);
+}
+
+.cs-final .cs-kicker {
+  color: var(--cs-black);
+}
+
+.cs-final__col {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(36px, 6vw, 80px);
+  align-items: start;
+  margin-bottom: clamp(60px, 8vw, 96px);
+}
+
+.cs-final__headline {
+  font-size: clamp(2.5rem, 5.2vw, 5.25rem);
+  line-height: 0.95;
+  color: var(--cs-black);
+}
+
+.cs-final__lede {
+  color: rgba(17, 17, 17, 0.85);
+  font-weight: 500;
+}
+
+.cs-final__showcase {
+  width: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--cs-black);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+  margin-bottom: clamp(60px, 8vw, 100px);
+}
+
+.cs-final__showcase img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cs-journey {
+  background: var(--cs-white);
+  border-radius: 28px;
+  padding: clamp(36px, 5vw, 72px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.cs-journey__rows {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid var(--cs-black);
+}
+
+.cs-journey__row {
+  display: grid;
+  grid-template-columns: 80px 220px 1fr 60px;
+  gap: 24px;
+  align-items: center;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--cs-gray-border);
+  transition: background 0.3s ease, padding-left 0.3s ease;
+}
+
+.cs-journey__row:hover {
+  background: var(--cs-yellow-subtle);
+  padding-left: 12px;
+}
+
+.cs-journey__num {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--cs-black);
+}
+
+.cs-journey__title {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--cs-black);
+}
+
+.cs-journey__desc {
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  font-size: 16px;
+  color: var(--cs-gray-muted);
+}
+
+.cs-journey__arrow {
+  display: flex;
+  justify-content: flex-end;
+  color: var(--cs-black);
+  transition: transform 0.3s ease;
+}
+
+.cs-journey__row:hover .cs-journey__arrow {
+  transform: translate(4px, 4px);
+  color: var(--cs-yellow-hover);
+}
+
+/* ------------------------- Ending Section -------------------------------- */
+
+.cs-end {
+  background: var(--cs-black);
+  color: var(--cs-white);
+  padding: clamp(96px, 14vw, 180px) 0 clamp(48px, 6vw, 72px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cs-end__inner {
+  max-width: var(--cs-container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cs-end__word {
+  font-size: clamp(3rem, 11vw, 10rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+}
+
+.cs-end__tag {
+  font-size: clamp(2rem, 6vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: clamp(48px, 6vw, 80px);
+}
+
+.cs-end__visual {
+  width: 100%;
+  max-width: 1100px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--cs-dark-border);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  margin-bottom: clamp(60px, 8vw, 96px);
+}
+
+.cs-end__visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cs-end__foot {
+  font-family: var(--font-heading, "Gilroy", sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cs-dark-muted);
+}
+
+/* ------------------------- Responsive Media Queries ---------------------- */
+
+@media (max-width: 1024px) {
+  .cs-cover__meta-grid,
+  .cs-overview__head,
+  .cs-challenge__row,
+  .cs-process__grid,
+  .cs-personas__head,
+  .cs-final__col {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .cs-timeline__row {
+    grid-template-columns: 80px 180px 1fr;
+    gap: 20px;
+  }
+
+  .cs-persona__grid,
+  .cs-persona--driver .cs-persona__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-journey__row {
+    grid-template-columns: 60px 160px 1fr 40px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cs-nav__chapters {
+    display: none;
+  }
+
+  .cs-nav {
+    padding: 16px 20px;
+  }
+
+  .cs-problem-words {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .cs-bid-stage {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .cs-phone-card--offset-up,
+  .cs-phone-card--offset-down {
+    transform: none;
+  }
+
+  .cs-timeline__row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .cs-persona__stage {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-journey__row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .cs-journey__arrow {
+    display: none;
+  }
+}
+
+/* ------------------------- Reduced Motion -------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .cs-phone-card:hover {
+    transform: none !important;
+  }
+}

@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 type TeamMember = { name: string; role: string; img?: string };
 
@@ -99,22 +100,28 @@ function About() {
 
       {/* Team */}
       <section id="team" className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 py-20 md:py-28">
-        <p className="eyebrow">About</p>
-        <h1 className="type-h2 mt-5 max-w-2xl">Meet Our Creative Minds</h1>
+        <ScrollReveal>
+          <p className="eyebrow">About</p>
+          <h1 className="type-h2 mt-5 max-w-2xl">Meet Our Creative Minds</h1>
+        </ScrollReveal>
 
         <div className="mt-16 space-y-16 md:space-y-20">
           {teamGroups.map((group) => (
             <div key={group.label}>
-              <p className="type-label uppercase tracking-[0.1em] text-muted-foreground">
-                {group.label}
-              </p>
+              <ScrollReveal>
+                <p className="type-label uppercase tracking-[0.1em] text-muted-foreground">
+                  {group.label}
+                </p>
+              </ScrollReveal>
               <div className="mt-8 flex flex-wrap justify-center gap-6">
-                {group.members.map((member) => (
+                {group.members.map((member, idx) => (
                   <div
                     key={member.name}
                     className="w-full max-w-[240px] sm:w-[calc((100%-2*1.5rem)/3)]"
                   >
-                    <TeamCard member={member} />
+                    <ScrollReveal delay={idx}>
+                      <TeamCard member={member} />
+                    </ScrollReveal>
                   </div>
                 ))}
               </div>
