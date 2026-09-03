@@ -9,7 +9,7 @@ const teamGroups = [
     label: "01 — Core Team",
     members: [
       { name: "Aakash Choudhary", role: "Founder", img: "/aakash.jpeg" },
-      { name: "Rishabh Khatri", role: "Manager" },
+      { name: "Rishabh Khatri", role: "Manager", img: "/rishabh.png" },
     ],
   },
   {
