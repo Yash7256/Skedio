@@ -16,8 +16,14 @@ export function useContactModal() {
   return context;
 }
 
-export function triggerContactModal() {
+export const CONTACT_PAGE_URL = "https://www.skediodesign.in/contact";
+
+export function goToContactPage() {
   if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent("open-contact-modal"));
+    window.location.href = CONTACT_PAGE_URL;
   }
+}
+
+export function triggerContactModal() {
+  goToContactPage();
 }
