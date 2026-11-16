@@ -7,7 +7,6 @@ import {
   selectedWork,
   type ProjectCategory,
   type ProjectCellSize,
-  type ProjectTagColor,
   type SelectedWorkItem,
 } from "@/data/projects";
 import { WebpImage } from "@/components/WebpImage";
@@ -29,12 +28,6 @@ const filterDotColors: Record<WorkFilter, string> = {
   Branding: "bg-[#f97316]",
   "Social Media": "bg-[#0d9488]",
   Development: "bg-[#2563eb]",
-};
-
-const tagColors: Record<ProjectTagColor, string> = {
-  purple: "bg-primary",
-  orange: "bg-[#f97316]",
-  teal: "bg-[#0d9488]",
 };
 
 const sizeClasses: Record<ProjectCellSize, string> = {
@@ -120,12 +113,6 @@ function ProjectCard({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent transition-opacity duration-200 ease-out" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100" />
-
-        <span
-          className={`absolute left-5 top-5 inline-flex rounded-full px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-white md:left-7 md:top-7 ${tagColors[project.tagColor]}`}
-        >
-          {project.category}
-        </span>
 
         <div className={`absolute inset-x-0 bottom-0 flex items-end gap-4 ${bottomClasses}`}>
           <div className={cn("min-w-0", isCompact && "hidden md:block")}>

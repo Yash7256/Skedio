@@ -184,18 +184,34 @@ export interface SelectedWorkItem {
   outcome?: string;
 }
 
-export const selectedWork: SelectedWorkItem[] = projects.map((p) => ({
-  slug: p.slug,
-  title: p.name,
-  subtitle: p.line,
-  category: p.category,
-  tagColor: p.tagColor,
-  image: p.cover,
-  size: p.size,
-  // Spread rather than `outcome: p.outcome` so an unset field stays absent
-  // from the item (exactOptionalPropertyTypes rejects an explicit undefined).
-  ...(p.outcome ? { outcome: p.outcome } : {}),
-}));
+/*
+ * Homepage grid order. On mobile the bento is a 2-column grid where the hero
+ * and wide cells span both columns, so the two single cells (EDIOS, ZedHealth)
+ * must be adjacent in the rendered list to share a row between the full-width
+ * cards. Ordering lives here, not in `projects`, because the /projects hub and
+ * the services page keep the data-file order for their own listings.
+ */
+const homepageOrder = ["haocabs", "edios", "zedhealth", "tiffinly"];
+
+const homepageRank = (project: ProjectSummary) => {
+  const rank = homepageOrder.indexOf(project.slug);
+  return rank === -1 ? homepageOrder.length : rank;
+};
+
+export const selectedWork: SelectedWorkItem[] = [...projects]
+  .sort((a, b) => homepageRank(a) - homepageRank(b))
+  .map((p) => ({
+    slug: p.slug,
+    title: p.name,
+    subtitle: p.line,
+    category: p.category,
+    tagColor: p.tagColor,
+    image: p.cover,
+    size: p.size,
+    // Spread rather than `outcome: p.outcome` so an unset field stays absent
+    // from the item (exactOptionalPropertyTypes rejects an explicit undefined).
+    ...(p.outcome ? { outcome: p.outcome } : {}),
+  }));
 
 export function getProjectBySlug(slug: string): ProjectSummary | undefined {
   return projects.find((p) => p.slug === slug);
