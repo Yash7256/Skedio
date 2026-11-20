@@ -17,6 +17,7 @@
 - [HAO Cabs — Taxi Bidding Experience Case Study](https://www.skediodesign.in/projects/haocabs): Complete product design and UX architecture for a real-time ride-bidding mobile platform connecting passengers and drivers.
 - [Tiffinly — Multi-role Food Subscription Platform](https://www.skediodesign.in/projects/tiffinly): Three unified mobile experiences connecting customers, tiffin providers, and delivery partners through a single ecosystem.
 - [EDIOS — Video Production Studio Identity](https://www.skediodesign.in/projects/edios): Brand identity and art direction for a video production studio.
+- [Postfolio — A Visual Collection](https://www.skediodesign.in/projects/postfolio): An image-led collection of creative work presented as a full-width visual gallery.
 
 ## Insights & Thought Leadership
 - [Insights Overview](https://www.skediodesign.in/insights): The full insights index on brand, UX, and technology.

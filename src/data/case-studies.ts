@@ -9,6 +9,8 @@ export interface ImageRef {
   alt: string;
   width?: number;
   height?: number;
+  /** Original file extension when it is not the default .jpg. */
+  ext?: string;
 }
 
 /**
@@ -124,6 +126,14 @@ export interface EditorialSection {
   visuals?: ImageRef[];
 }
 
+/** Image-only section: a stacked sequence of full-width visuals, no copy. */
+interface GallerySection {
+  type: "gallery";
+  id: string;
+  num: string;
+  images: ImageRef[];
+}
+
 interface EndingSection {
   type: "ending";
   word: string;
@@ -140,6 +150,7 @@ export type CaseStudySection =
   | PersonasSection
   | FinalSection
   | EditorialSection
+  | GallerySection
   | EndingSection;
 
 export const caseStudies: CaseStudyDocument[] = [
@@ -882,8 +893,8 @@ export const caseStudies: CaseStudyDocument[] = [
       {
         type: "editorial",
         id: "outcome",
-        num: "09",
-        kicker: "09 — THE OUTCOME",
+        num: "08",
+        kicker: "08 — THE OUTCOME",
         headline: "A Complete Multi-Role\n**Mobile Ecosystem.**",
         lede: [
           "The result is a complete multi-role mobile UI ecosystem that covers the major workflows of Tiffinly — from onboarding and subscription selection to provider operations and final delivery.",
@@ -1180,8 +1191,8 @@ export const caseStudies: CaseStudyDocument[] = [
       {
         type: "editorial",
         id: "outcome",
-        num: "08",
-        kicker: "08 — THE OUTCOME",
+        num: "09",
+        kicker: "09 — THE OUTCOME",
         headline: "Phase One:\n**Live And Complete.**",
         lede: [
           "Phase 1 delivered a four-page ZedHealth Administration website with responsive layouts, a clear service structure, and a contact and enquiry flow. The site now gives the organisation a credible digital home for its healthcare administration and care-coordination work.",
@@ -1201,6 +1212,97 @@ export const caseStudies: CaseStudyDocument[] = [
           height: 1024,
         },
         foot: "End of case study — Skédio",
+      },
+    ],
+  },
+  {
+    slug: "postfolio",
+    assets: "/Postfolio",
+    brand: "POSTFOLIO",
+    chapters: [{ id: "gallery", num: "01", label: "Gallery" }],
+    sections: [
+      {
+        type: "cover",
+        wordmark: [{ text: "POSTFOLIO" }],
+        facts: [],
+        subtitle: [],
+        coverImage: {
+          name: "coverimage",
+          ext: "jpeg",
+          alt: "Postfolio — cover artwork",
+          width: 1024,
+          height: 768,
+        },
+      },
+      {
+        type: "gallery",
+        id: "gallery",
+        num: "01",
+        images: [
+          {
+            name: "image2",
+            ext: "jpeg",
+            alt: "Postfolio — selected image 2",
+            width: 1024,
+            height: 768,
+          },
+          {
+            name: "image3",
+            ext: "jpeg",
+            alt: "Postfolio — selected image 3",
+            width: 1024,
+            height: 768,
+          },
+          {
+            name: "image4",
+            ext: "jpeg",
+            alt: "Postfolio — selected image 4",
+            width: 1024,
+            height: 768,
+          },
+          {
+            name: "image5",
+            ext: "jpeg",
+            alt: "Postfolio — selected image 5",
+            width: 1024,
+            height: 768,
+          },
+          {
+            name: "image6",
+            ext: "jpeg",
+            alt: "Postfolio — selected image 6",
+            width: 1024,
+            height: 768,
+          },
+          {
+            name: "image7",
+            ext: "jpeg",
+            alt: "Postfolio — selected image 7",
+            width: 1024,
+            height: 768,
+          },
+          {
+            name: "image8",
+            ext: "jpeg",
+            alt: "Postfolio — selected image 8",
+            width: 1024,
+            height: 768,
+          },
+          {
+            name: "image9",
+            ext: "jpeg",
+            alt: "Postfolio — selected image 9",
+            width: 1024,
+            height: 768,
+          },
+          {
+            name: "thankyou",
+            ext: "jpeg",
+            alt: "Postfolio — closing artwork",
+            width: 1024,
+            height: 768,
+          },
+        ],
       },
     ],
   },

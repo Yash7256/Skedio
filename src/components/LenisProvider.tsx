@@ -1,11 +1,36 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { loadScrollTrigger, onAnimationIdle } from "@/lib/animation-loader";
+import { SmoothScrollContext, nativeScrollTo, type SmoothScroll } from "@/lib/smooth-scroll";
 
 // Type-only: `typeof import(...)` in type position is erased at compile time,
 // so lenis itself still loads on demand below — zero critical-path bytes.
 type LenisModule = typeof import("lenis/react");
+
+function SmoothScrollBridge({
+  useLenis,
+  children,
+}: {
+  useLenis: LenisModule["useLenis"];
+  children: ReactNode;
+}) {
+  const lenis = useLenis();
+  const scrollTo = useCallback<SmoothScroll>(
+    (target, options = {}) => {
+      if (!lenis) {
+        nativeScrollTo(target, options);
+        return;
+      }
+      lenis.scrollTo(target, {
+        offset: options.offset ?? 0,
+        immediate: options.immediate ?? false,
+      });
+    },
+    [lenis],
+  );
+  return <SmoothScrollContext.Provider value={scrollTo}>{children}</SmoothScrollContext.Provider>;
+}
 
 /**
  * Keeps ScrollTrigger in lock-step with Lenis's eased scroll. Without this,
@@ -109,7 +134,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       ref={lenisRef}
       options={{
         autoRaf: false,
-        anchors: true,
+        anchors: { offset: -80 },
         autoToggle: true,
         lerp: 0.085,
         wheelMultiplier: 1,
@@ -118,7 +143,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
         syncTouch: smoothTouch,
       }}
     >
-      {children}
+      <SmoothScrollBridge useLenis={lenisMod.useLenis}>{children}</SmoothScrollBridge>
       <ScrollSync useLenis={lenisMod.useLenis} />
     </SmoothRoot>
   );

@@ -1,6 +1,18 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowDown, ArrowDownRight, ArrowLeft, ArrowUpRight, ChevronDown } from "lucide-react";
-import { Fragment, type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  type CSSProperties,
+  type ReactNode,
+  type RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import type { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { getProjectBySlug } from "@/data/projects";
 import { getServicesBySlugs } from "@/data/services";
@@ -8,8 +20,10 @@ import { getServicesBySlugs } from "@/data/services";
 // inside the loader so this 911-line data module stays out of the client
 // entry chunk; see the loader below.
 import type { CaseStudyDocument, CaseStudySection, ImageRef } from "@/data/case-studies";
+import { loadScrollTrigger } from "@/lib/animation-loader";
 import { seo, canonicalLink } from "@/lib/seo";
 import { StructuredData } from "@/components/StructuredData";
+import { useSmoothScroll } from "@/lib/smooth-scroll";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import {
   getBreadcrumbSchema,
@@ -175,6 +189,7 @@ function CsImage({
     image.width != null && image.height != null ? { width: image.width, height: image.height } : {};
   const managed = MANAGED_VARIANTS[`${assets}/${image.name}`];
   const base = `${assets}/${image.name}`;
+  const src = `${base}.${image.ext ?? "jpg"}`;
   // Extension of the fallback original: managed entries mirror the formats
   // the build emits (jpg originals have jpg variants; the png cover only
   // has webp variants, so its <img> keeps the single src as before).
@@ -194,7 +209,7 @@ function CsImage({
       : undefined;
   return (
     <WebpImage
-      src={`${assets}/${image.name}.jpg`}
+      src={src}
       alt={image.alt}
       {...dims}
       className={className}
@@ -252,6 +267,211 @@ function RichText({ text }: { text: string }) {
 }
 
 /* ------------------------- Reusable Primitives ------------------------- */
+
+type KillableAnimation = {
+  kill: () => void;
+  scrollTrigger?: ScrollTrigger | null;
+};
+
+function useCaseStudyMotion(scopeRef: RefObject<HTMLElement | null>, slug: string) {
+  useGSAP(
+    () => {
+      const root = scopeRef.current;
+      if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      let disposed = false;
+      const animations: KillableAnimation[] = [];
+
+      const coverWords = root.querySelectorAll<HTMLElement>(".cs-cover__word .row");
+      const coverFacts = root.querySelectorAll<HTMLElement>(".cs-cover__fact-item");
+      const coverSub = root.querySelector<HTMLElement>(".cs-cover__sub");
+      const coverArt = root.querySelector<HTMLElement>(".cs-cover__art-inner");
+      const coverScroll = root.querySelector<HTMLElement>(".cs-cover__scroll");
+      const coverTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      animations.push(coverTl);
+      if (coverWords.length > 0) {
+        coverTl.from(coverWords, { y: 34, opacity: 0, duration: 0.8, stagger: 0.09 }, 0);
+      }
+      if (coverFacts.length > 0) {
+        coverTl.from(coverFacts, { y: 18, opacity: 0, duration: 0.55, stagger: 0.07 }, 0.2);
+      }
+      if (coverSub) {
+        coverTl.from(coverSub, { y: 22, opacity: 0, duration: 0.65 }, 0.32);
+      }
+      if (coverArt) {
+        coverTl.from(coverArt, { y: 28, opacity: 0, scale: 1.02, duration: 1 }, 0.12);
+      }
+      if (coverScroll) {
+        coverTl.from(coverScroll, { opacity: 0, duration: 0.45 }, 0.8);
+      }
+
+      void loadScrollTrigger().then((mod) => {
+        if (disposed || !mod) return;
+
+        const ending = root.querySelector<HTMLElement>(".cs-end");
+        if (ending) {
+          const word = ending.querySelector<HTMLElement>(".cs-end__word");
+          const tags = ending.querySelectorAll<HTMLElement>(".cs-end__tag span");
+          const visual = ending.querySelector<HTMLElement>(".cs-end__visual img");
+          const foot = ending.querySelector<HTMLElement>(".cs-end__foot");
+          const endTl = gsap.timeline({
+            defaults: { ease: "power3.out" },
+            scrollTrigger: { trigger: ending, start: "top 82%", once: true },
+          });
+          animations.push(endTl);
+          if (word) endTl.from(word, { y: 44, opacity: 0, duration: 0.8 }, 0);
+          if (tags.length > 0) {
+            endTl.from(tags, { y: 22, opacity: 0, duration: 0.6, stagger: 0.08 }, 0.12);
+          }
+          if (visual) endTl.from(visual, { scale: 1.06, duration: 0.9 }, 0.18);
+          if (foot) endTl.from(foot, { opacity: 0, duration: 0.5 }, 0.55);
+        }
+
+        root.querySelectorAll<HTMLElement>(".cs-bid-stage .cs-phone-card img").forEach((img) => {
+          const card = img.closest<HTMLElement>(".cs-phone-card") ?? img;
+          animations.push(
+            gsap.fromTo(
+              img,
+              { yPercent: -4, scale: 1.08 },
+              {
+                yPercent: 4,
+                scale: 1.08,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: true,
+                },
+              },
+            ),
+          );
+        });
+
+        const visualSelector =
+          ".cs-overview__visual img, .cs-process__visual img, .cs-final__showcase img, .cs-editorial__visual img";
+        root.querySelectorAll<HTMLElement>(visualSelector).forEach((img) => {
+          const frame = img.parentElement ?? img;
+          animations.push(
+            gsap.fromTo(
+              img,
+              { yPercent: -5, scale: 1.06 },
+              {
+                yPercent: 5,
+                scale: 1.06,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: frame,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: true,
+                },
+              },
+            ),
+          );
+        });
+
+        root.querySelectorAll<HTMLElement>(".cs-persona__phone-frame img").forEach((img) => {
+          const frame = img.closest<HTMLElement>(".cs-persona__phone-frame") ?? img;
+          animations.push(
+            gsap.fromTo(
+              img,
+              { yPercent: -3, scale: 1.05 },
+              {
+                yPercent: 3,
+                scale: 1.05,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: frame,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: true,
+                },
+              },
+            ),
+          );
+        });
+
+        root.querySelectorAll<HTMLElement>(".cs-editorial__points").forEach((points) => {
+          const items = points.querySelectorAll<HTMLElement>(".cs-editorial__point-item");
+          if (items.length === 0) return;
+          animations.push(
+            gsap.from(items, {
+              x: -16,
+              opacity: 0,
+              duration: 0.55,
+              stagger: 0.06,
+              ease: "power3.out",
+              scrollTrigger: { trigger: points, start: "top 86%", once: true },
+            }),
+          );
+        });
+
+        root.querySelectorAll<HTMLElement>(".cs-timeline__row, .cs-journey__row").forEach((row) => {
+          const cells = Array.from(row.children);
+          if (cells.length === 0) return;
+          animations.push(
+            gsap.from(cells, {
+              y: 14,
+              opacity: 0,
+              duration: 0.5,
+              stagger: 0.07,
+              ease: "power3.out",
+              scrollTrigger: { trigger: row, start: "top 90%", once: true },
+            }),
+          );
+        });
+
+        root.querySelectorAll<HTMLElement>(".cs-persona").forEach((persona) => {
+          const details = persona.querySelectorAll<HTMLElement>(
+            ".cs-persona__name, .cs-persona__role, .cs-persona__pill",
+          );
+          if (details.length === 0) return;
+          animations.push(
+            gsap.from(details, {
+              y: 16,
+              opacity: 0,
+              duration: 0.55,
+              stagger: 0.07,
+              ease: "power3.out",
+              scrollTrigger: { trigger: persona, start: "top 82%", once: true },
+            }),
+          );
+        });
+
+        const services = root.querySelector<HTMLElement>(".cs-services");
+        if (services) {
+          const links = services.querySelectorAll<HTMLElement>(
+            ".cs-services__link, .cs-services__cta-link",
+          );
+          if (links.length > 0) {
+            animations.push(
+              gsap.from(links, {
+                y: 16,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.07,
+                ease: "power3.out",
+                scrollTrigger: { trigger: services, start: "top 88%", once: true },
+              }),
+            );
+          }
+        }
+
+        mod.ScrollTrigger.refresh();
+      });
+
+      return () => {
+        disposed = true;
+        for (const animation of animations) {
+          animation.scrollTrigger?.kill();
+          animation.kill();
+        }
+      };
+    },
+    { scope: scopeRef, dependencies: [slug], revertOnUpdate: true },
+  );
+}
 
 function useInView<T extends HTMLElement>(options?: IntersectionObserverInit) {
   const ref = useRef<T | null>(null);
@@ -345,7 +565,7 @@ function CoverSection({
   section: Extract<CaseStudySection, { type: "cover" }>;
   crumbs: BreadcrumbItem[];
 }) {
-  const artRef = useInView<HTMLDivElement>();
+  const firstChapterId = doc.chapters[0]?.id;
 
   return (
     <header className="cs-cover" id="top">
@@ -361,33 +581,37 @@ function CoverSection({
       </div>
 
       <div className="cs-cover__meta-grid">
-        <div className="cs-cover__facts">
-          {section.facts.map((f) => (
-            <div key={f.label} className="cs-cover__fact-item">
-              <span className="cs-cover__fact-label">{f.label}</span>
-              <span className="cs-cover__fact-val">{f.value}</span>
-            </div>
-          ))}
-        </div>
+        {section.facts.length > 0 && (
+          <div className="cs-cover__facts">
+            {section.facts.map((f) => (
+              <div key={f.label} className="cs-cover__fact-item">
+                <span className="cs-cover__fact-label">{f.label}</span>
+                <span className="cs-cover__fact-val">{f.value}</span>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div>
-          <h2 className="cs-cover__sub">
-            {section.subtitle.map((line, i) => (
-              <Fragment key={i}>
-                {i > 0 && <br />}
-                {line}
-              </Fragment>
-            ))}
-          </h2>
+          {section.subtitle.length > 0 && (
+            <h2 className="cs-cover__sub">
+              {section.subtitle.map((line, i) => (
+                <Fragment key={i}>
+                  {i > 0 && <br />}
+                  {line}
+                </Fragment>
+              ))}
+            </h2>
+          )}
           <div className="cs-cover__scroll-row">
-            <a href="#overview" className="cs-cover__scroll">
+            <a href={firstChapterId ? `#${firstChapterId}` : "#top"} className="cs-cover__scroll">
               SCROLL TO EXPLORE <ArrowDown size={14} />
             </a>
           </div>
         </div>
       </div>
 
-      <figure className="cs-cover__art" ref={artRef as never}>
+      <figure className="cs-cover__art">
         <div className="cs-cover__art-inner">
           <CsImage
             image={section.coverImage}
@@ -420,14 +644,20 @@ function TagMarquee({ items }: { items: string[] }) {
   );
 }
 
-function ChapterNav({ chapters }: { chapters: CaseStudyDocument["chapters"] }) {
+function ChapterNav({
+  chapters,
+  onNavigate,
+}: {
+  chapters: CaseStudyDocument["chapters"];
+  onNavigate: (id: string) => void;
+}) {
   const [expanded, setExpanded] = useState(false);
   const visible = expanded ? chapters : chapters.slice(0, 3);
   const hiddenCount = chapters.length - 3;
 
   const goTo = (id: string) => {
     setExpanded(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    onNavigate(id);
   };
 
   return (
@@ -756,6 +986,73 @@ function EditorialSectionRenderer({
   );
 }
 
+function GallerySectionRenderer({
+  doc,
+  section,
+}: {
+  doc: CaseStudyDocument;
+  section: Extract<CaseStudySection, { type: "gallery" }>;
+}) {
+  const hostRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const slides = [...host.querySelectorAll<HTMLElement>(".cs-gallery__slide")];
+    if (slides.length < 2) return;
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const top = host.getBoundingClientRect().top + window.scrollY;
+      const height = slides[0]?.offsetHeight ?? window.innerHeight;
+      const y = window.scrollY;
+      // Progress 0 -> 1 while a frame travels from the viewport bottom to the
+      // top. The NEXT frame's progress drives this one's shrink/dim, so the
+      // depth change is visible while it is still being covered.
+      const progress = slides.map((_, i) =>
+        Math.min(1, Math.max(0, (y - (top + i * height - height)) / height)),
+      );
+      slides.forEach((slide, i) => {
+        const enter = progress[i] ?? 0;
+        const cover = progress[i + 1] ?? 0;
+        const settle =
+          i === slides.length - 1 ? Math.min(1, Math.max(0, (enter - 0.72) / 0.28)) : 0;
+        slide.style.setProperty("--enter", enter.toFixed(3));
+        slide.style.setProperty("--cover", cover.toFixed(3));
+        slide.style.setProperty("--settle", settle.toFixed(3));
+        const inner = slide.querySelector<HTMLElement>(".cs-gallery__slide-inner");
+        if (inner) inner.style.willChange = enter < 1 || cover > 0 ? "transform, filter" : "auto";
+      });
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [section.images.length]);
+
+  return (
+    <Section className="cs-gallery" id={section.id} dataChapter={section.num}>
+      <div className="cs-gallery__grid" ref={hostRef}>
+        {section.images.map((image) => (
+          <div className="cs-gallery__slide" key={image.name}>
+            <div className="cs-gallery__slide-inner">
+              <CsImage image={image} assets={doc.assets} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
 function EndingSection({
   doc,
   section,
@@ -797,8 +1094,8 @@ function ServiceCrossLinks({ slugs }: { slugs: string[] }) {
   return (
     <section className="cs-services" aria-labelledby="cs-services-heading">
       <div className="cs-services__inner">
-        <p className="cs-services__kicker"></p>
-        <h2 id="cs-services-heading" className="cs-services__title" style={{ marginTop: '1rem' }}>
+        <p className="cs-services__kicker">EXPERTISE</p>
+        <h2 id="cs-services-heading" className="cs-services__title">
           The craft behind this work
         </h2>
         <div className="cs-services__list">
@@ -838,6 +1135,8 @@ function SectionRenderer({ doc, section }: { doc: CaseStudyDocument; section: Ca
       return <FinalSection doc={doc} section={section} />;
     case "editorial":
       return <EditorialSectionRenderer doc={doc} section={section} />;
+    case "gallery":
+      return <GallerySectionRenderer doc={doc} section={section} />;
     default:
       return null;
   }
@@ -849,6 +1148,15 @@ function CaseStudy() {
 
   const [activeChapter, setActiveChapter] = useState("01");
   const [isScrolled, setIsScrolled] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
+  const smoothScroll = useSmoothScroll();
+  const smoothScrollRef = useRef(smoothScroll);
+
+  useCaseStudyMotion(mainRef, slug);
+
+  useEffect(() => {
+    smoothScrollRef.current = smoothScroll;
+  }, [smoothScroll]);
 
   useEffect(() => {
     const sections = [...document.querySelectorAll<HTMLElement>("[data-chapter]")];
@@ -868,6 +1176,8 @@ function CaseStudy() {
   }, [slug]);
 
   useEffect(() => {
+    const main = mainRef.current;
+    const gallery = main?.querySelector<HTMLElement>(".cs-gallery");
     let raf = 0;
     let last = window.scrollY > 50;
     const sync = () => {
@@ -876,6 +1186,10 @@ function CaseStudy() {
       if (next !== last) {
         last = next;
         setIsScrolled(next);
+      }
+      // Switch the fixed nav only once the dark stage sits behind it.
+      if (main && gallery) {
+        main.classList.toggle("cs--dark-nav", gallery.getBoundingClientRect().top <= 80);
       }
     };
     const onScroll = () => {
@@ -886,27 +1200,25 @@ function CaseStudy() {
     };
     // Initial sync is async (via rAF) so the effect body itself never calls
     // setState synchronously; state settles before first scroll update.
-    raf = requestAnimationFrame(() => {
-      raf = 0;
-      setIsScrolled((prev) => (prev === last ? prev : last));
-    });
+    raf = requestAnimationFrame(sync);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (raf) cancelAnimationFrame(raf);
+      main?.classList.remove("cs--dark-nav");
     };
   }, [slug]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    smoothScrollRef.current(0, { immediate: true });
   }, [slug]);
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = useCallback((id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      smoothScrollRef.current(el, { offset: -80 });
     }
-  };
+  }, []);
 
   const creativeWorkSchema = getCreativeWorkSchema({
     name: project.name,
@@ -935,11 +1247,13 @@ function CaseStudy() {
     (s): s is Exclude<CaseStudySection, { type: "cover" } | { type: "ending" }> =>
       s.type !== "cover" && s.type !== "ending",
   );
+  const isImageOnly = bodySections.some((s) => s.type === "gallery");
 
   return (
     <main
       id="main-content"
-      className="cs"
+      ref={mainRef}
+      className={`cs${isImageOnly ? " cs--images" : ""}`}
       style={
         {
           "--cs-accent": project.themeColor,
@@ -988,10 +1302,13 @@ function CaseStudy() {
 
       {/* Case Study Editorial Sections */}
       {coverSection && <CoverSection doc={doc} section={coverSection} crumbs={breadcrumbItems} />}
-      <ChapterNav chapters={doc.chapters} />
+      {doc.chapters.length > 1 && (
+        <ChapterNav chapters={doc.chapters} onNavigate={scrollToSection} />
+      )}
       {bodySections.map((section) => (
         <SectionRenderer key={`${section.type}-${section.id}`} doc={doc} section={section} />
       ))}
+      {!isImageOnly && <ServiceCrossLinks slugs={project.serviceSlugs} />}
       {endingSection && <EndingSection doc={doc} section={endingSection} />}
     </main>
   );

@@ -510,6 +510,7 @@
 }
 
 .cs-phone-card {
+  --cs-phone-offset: 0px;
   border-radius: 24px;
   overflow: hidden;
   background: var(--cs-dark-surface);
@@ -520,17 +521,25 @@
     box-shadow 0.5s ease;
 }
 
-.cs-phone-card:hover {
-  transform: translateY(-10px);
+.cs-phone-card.cs-reveal {
+  transform: translateY(calc(28px + var(--cs-phone-offset)));
+}
+
+.cs-phone-card.cs-reveal.is-inview {
+  transform: translateY(var(--cs-phone-offset));
+}
+
+.cs-phone-card.cs-reveal.is-inview:hover {
+  transform: translateY(calc(var(--cs-phone-offset) - 10px));
   box-shadow: 0 32px 80px rgba(255, 196, 0, 0.15);
 }
 
 .cs-phone-card--offset-up {
-  transform: translateY(-24px);
+  --cs-phone-offset: -24px;
 }
 
 .cs-phone-card--offset-down {
-  transform: translateY(24px);
+  --cs-phone-offset: 24px;
 }
 
 .cs-phone-card img {
@@ -1090,6 +1099,102 @@
   gap: clamp(16px, 2.5vw, 28px);
 }
 
+/* ------------------------- Image-Only Gallery ---------------------------- */
+
+/* `overflow-x: hidden` on .cs would compute overflow-y to auto and turn .cs
+   into a scrollport, which breaks position: sticky. `clip` does not. */
+.cs--images {
+  overflow-x: clip;
+}
+
+.cs--images .cs-cover__meta-grid {
+  grid-template-columns: 1fr;
+}
+
+.cs--images .cs-cover__art-inner {
+  aspect-ratio: 4 / 3;
+}
+
+.cs-gallery {
+  background: #0a0a0c;
+  color: var(--cs-white);
+  padding: 0;
+  position: relative;
+}
+
+.cs-gallery .cs-section-inner {
+  max-width: none;
+  padding: 0 clamp(10px, 2vw, 28px);
+}
+
+.cs-gallery__grid {
+  display: block;
+  position: relative;
+}
+
+/* Each frame pins at the top; the next one scrolls up over it. Later siblings
+   paint on top, so the stack reads without any z-index juggling. */
+.cs-gallery__slide {
+  --enter: 1;
+  --cover: 0;
+  --settle: 0;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: clamp(84px, 11vh, 120px) 0 clamp(32px, 6vh, 72px);
+}
+
+.cs-gallery__slide-inner {
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  border-radius: clamp(14px, 1.8vw, 26px);
+  overflow: hidden;
+  background: #151518;
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.55),
+    0 8px 24px rgba(0, 0, 0, 0.35);
+  transform: translate3d(0, calc((1 - var(--enter)) * 4%), 0)
+    scale(calc(1.03 - var(--enter) * 0.03 - var(--cover) * 0.085));
+  filter: brightness(calc(1 - var(--cover) * 0.45));
+}
+
+.cs-gallery__slide:last-child .cs-gallery__slide-inner {
+  transform: translate3d(0, calc((1 - var(--enter)) * 4% - var(--settle) * 1%), 0)
+    scale(calc(1.03 - var(--enter) * 0.03 - var(--cover) * 0.085 + var(--settle) * 0.018));
+  filter: brightness(calc(1 - var(--cover) * 0.45 + var(--settle) * 0.06));
+}
+
+.cs-gallery__slide-inner img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cs--dark-nav .cs-nav,
+.cs--dark-nav .cs-nav--scrolled {
+  background: rgba(10, 10, 12, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cs--dark-nav .cs-nav__brand,
+.cs--dark-nav .cs-nav__link {
+  color: var(--cs-white);
+}
+
+.cs--dark-nav .cs-nav__chapter-btn {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cs--dark-nav .cs-nav__chapter-btn.is-active {
+  color: var(--cs-white);
+  border-bottom-color: var(--cs-accent);
+}
+
 /* ------------------------- Ending Section -------------------------------- */
 
 .cs-end {
@@ -1343,6 +1448,14 @@
     padding: 16px 20px;
   }
 
+  .cs-gallery__slide {
+    padding: 76px 0 28px;
+  }
+
+  .cs-gallery__slide-inner {
+    border-radius: 14px;
+  }
+
   .cs-cover {
     padding-bottom: 0;
   }
@@ -1475,7 +1588,7 @@
 
   .cs-phone-card--offset-up,
   .cs-phone-card--offset-down {
-    transform: none;
+    --cs-phone-offset: 0px;
   }
 
   .cs-timeline__row {
@@ -1518,5 +1631,17 @@
 
   .cs-phone-card:hover {
     transform: none !important;
+  }
+
+  .cs-gallery__slide {
+    position: relative;
+    height: auto;
+    padding: clamp(20px, 4vw, 48px) 0;
+  }
+
+  .cs-gallery__slide-inner {
+    transform: none !important;
+    filter: none !important;
+    will-change: auto !important;
   }
 }

@@ -30,6 +30,11 @@ const filterDotColors: Record<WorkFilter, string> = {
   Development: "bg-[#2563eb]",
 };
 
+const allFilterWork = selectedWork.filter((project) => project.slug !== "tiffinly");
+
+const workForFilter = (value: WorkFilter) =>
+  value === "all" ? allFilterWork : selectedWork.filter((project) => project.category === value);
+
 const sizeClasses: Record<ProjectCellSize, string> = {
   hero: "col-span-2 aspect-[16/9] sm:aspect-[21/9] md:col-span-2 md:row-span-2 md:aspect-auto",
   wide: "col-span-2 aspect-[16/9] sm:aspect-[21/9] md:col-span-2 md:aspect-auto",
@@ -51,6 +56,7 @@ const coverDims: Record<string, { width: number; height: number }> = {
   "/EDIOS/1.jpg": { width: 800, height: 450 },
   "/tiffinly/1.jpg": { width: 800, height: 534 },
   "/ZedHealth/1.jpg": { width: 800, height: 626 },
+  "/Postfolio/coverimage.jpeg": { width: 1024, height: 768 },
 };
 
 const MORPH_MS = 480;
@@ -190,8 +196,7 @@ export function SelectedWork() {
     };
   }, []);
 
-  const visible =
-    filter === "all" ? selectedWork : selectedWork.filter((p) => p.category === filter);
+  const visible = workForFilter(filter);
 
   const registerRef: RegisterRef = (slug, el) => {
     linkRefs.current.set(slug, el);
@@ -203,8 +208,7 @@ export function SelectedWork() {
     reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (ghostTimer.current) window.clearTimeout(ghostTimer.current);
 
-    const nextList =
-      next === "all" ? selectedWork : selectedWork.filter((p) => p.category === next);
+    const nextList = workForFilter(next);
     const nextSlugs = new Set(nextList.map((p) => p.slug));
 
     const rects = new Map<string, DOMRect>();
@@ -398,6 +402,18 @@ export function SelectedWork() {
             </span>
           );
         })}
+      </div>
+
+      <div className="mt-10 flex justify-center sm:mt-12">
+        <Link
+          to="/projects"
+          className="group type-button inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-6 py-3 text-foreground transition-colors duration-250 ease-out hover:border-ink hover:bg-ink hover:text-ink-foreground"
+        >
+          See All
+          <span className="grid size-8 place-items-center rounded-full bg-foreground/10 transition-transform duration-250 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+            <ArrowUpRight className="size-4" />
+          </span>
+        </Link>
       </div>
     </section>
   );

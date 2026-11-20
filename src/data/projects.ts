@@ -170,6 +170,34 @@ export const projects: ProjectSummary[] = [
     size: "normal",
     published: true,
   },
+  {
+    slug: "postfolio",
+    name: "Postfolio",
+    line: "A Visual Collection",
+    tag: "Visual Gallery",
+    cover: "/Postfolio/coverimage.jpeg",
+    metaTitle: "Postfolio — A Visual Collection | Skédio",
+    metaDescription:
+      "Browse Postfolio, an image-led collection of creative work from Skédio, presented as a clean visual gallery.",
+    ogImage: "/Postfolio/coverimage.jpeg",
+    ogImageWidth: 1024,
+    ogImageHeight: 768,
+    themeColor: "#8537F4",
+    year: "2026",
+    platform: "Visual Gallery",
+    discipline: "Marketing Creatives & Social Media Design",
+    scope: "Art Direction, Visual Design",
+    publishedDate: "2026-11-20",
+    client: "Postfolio",
+    summary:
+      "An image-led collection of creative work, presented as a clean, full-width visual gallery.",
+    services: ["Visual Design", "Marketing Creatives"],
+    serviceSlugs: ["marketing-creatives"],
+    category: "Social Media",
+    tagColor: "purple",
+    size: "wide",
+    published: true,
+  },
 ];
 
 /* Bento grid shape used by the SelectedWork section — derived from projects. */
@@ -191,7 +219,7 @@ export interface SelectedWorkItem {
  * cards. Ordering lives here, not in `projects`, because the /projects hub and
  * the services page keep the data-file order for their own listings.
  */
-const homepageOrder = ["haocabs", "edios", "zedhealth", "tiffinly"];
+const homepageOrder = ["haocabs", "edios", "zedhealth", "tiffinly", "postfolio"];
 
 const homepageRank = (project: ProjectSummary) => {
   const rank = homepageOrder.indexOf(project.slug);
