@@ -40,11 +40,11 @@ export const Route = createRootRoute({
     ],
     links: [
       // /skedio-logomark.png is deliberately NOT an icon: it is 278x275, and
-      // favicons must be square (Google wants multiples of 48). It still ships
-      // as the Organization logo in the JSON-LD — see src/lib/schema.ts.
-      { rel: "icon", type: "image/x-icon", sizes: "48x48", href: "/favicon.ico" },
-      { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
-      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+      // favicons must be square. It still ships as the Organization logo in the
+      // JSON-LD — see src/lib/schema.ts. Browsers use the vector SVG favicon;
+      // the raster files below remain for Apple touch icons and the web app
+      // manifest, where SVG support is not universal.
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
       {
         rel: "icon",

@@ -1,0 +1,14 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#favicon-clip)">
+    <path d="M248.5 226.869L388.945 105.64L248.5 39.6221L126.062 156.052L133.262 273.69L270.098 328.901L171.675 415.326L270.098 494.533L403.343 343.299L380.537 283.289L248.5 226.869Z" fill="white"/>
+    <path d="M123.106 122.709L38.0702 0L0 47.7591L123.106 122.709Z" fill="#8537F4"/>
+    <path d="M368.412 233.671L468.242 344.67L499.998 292.508L368.412 233.671Z" fill="#8537F4"/>
+    <path d="M125.649 131.875L30.6543 108.69L32.7473 148.637L125.649 131.875Z" fill="white"/>
+    <path d="M358.852 203.631L454.478 224.127L451.248 184.253L358.852 203.631Z" fill="white"/>
+  </g>
+  <defs>
+    <clipPath id="favicon-clip">
+      <rect width="500" height="500" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>
