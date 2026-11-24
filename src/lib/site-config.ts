@@ -67,9 +67,10 @@ export const siteConfig = {
    */
   responseTime: "24 hours",
   socials: {
-    linkedin: "https://www.linkedin.com/company/skedio",
-    instagram: "https://www.instagram.com/skedio.studio",
-    behance: "https://www.behance.net/skedio",
+    // Verified studio profiles. `/company/skedio` and `skedio.studio` belong to
+    // unrelated businesses; there is no studio Behance profile to link.
+    linkedin: "https://www.linkedin.com/company/skediocreativestudio",
+    instagram: "https://www.instagram.com/the.skedio/",
   },
   themeColor: "#8537F4",
   address: {

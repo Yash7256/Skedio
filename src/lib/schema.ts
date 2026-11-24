@@ -16,7 +16,7 @@ export function getOrganizationSchema() {
     description: siteConfig.description,
     email: siteConfig.email,
     telephone: siteConfig.phone,
-    sameAs: [siteConfig.socials.linkedin, siteConfig.socials.instagram, siteConfig.socials.behance],
+    sameAs: [siteConfig.socials.linkedin, siteConfig.socials.instagram],
     contactPoint: [
       {
         "@type": "ContactPoint",
