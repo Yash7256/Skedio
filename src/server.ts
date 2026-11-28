@@ -39,9 +39,9 @@ function buildContentSecurityPolicy(nonce: string): string {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self'",
     "font-src 'self'",
-    // formsubmit.co is the contact form's fetch target; gateway.umami.is is
-    // the endpoint the Umami tag posts events to.
-    "connect-src 'self' https://formsubmit.co https://gateway.umami.is",
+    // formsubmit.co is the contact form's fetch target. Umami posts to
+    // cloud.umami.is by default; gateway.umami.is is kept for custom hosts.
+    "connect-src 'self' https://formsubmit.co https://gateway.umami.is https://cloud.umami.is",
     "object-src 'none'",
     "base-uri 'self'",
     "frame-ancestors 'none'",
