@@ -160,8 +160,8 @@ function Careers() {
         id="openings"
         className="mx-auto w-full max-w-[1200px] scroll-mt-24 px-6 pb-16 md:pb-20"
       >
-        <div className="border-t border-border pt-14 md:pt-16">
-          <div className="grid gap-10 md:grid-cols-[minmax(0,3fr)_minmax(280px,2fr)] md:gap-x-16">
+        <div className="border-t border-border pt-12 md:pt-14">
+          <div className="grid gap-8 md:grid-cols-[minmax(0,3fr)_minmax(280px,2fr)] md:items-start md:gap-x-14">
             <ScrollReveal>
               <h2
                 className="font-heading max-w-[15ch] font-light leading-[1.08] tracking-tight"
@@ -176,14 +176,14 @@ function Careers() {
             </ScrollReveal>
 
             <ScrollReveal direction="fade">
-              <div className="border-t border-primary/30 pt-6">
+              <div className="md:pt-2">
                 <a
                   href="#apply"
                   onClick={() => applyFor(openApplicationRole)}
-                  className="group flex items-center justify-between gap-6 border-b border-border pb-5 transition-colors duration-200 hover:border-primary"
+                  className="group flex items-center justify-between gap-6 border-y border-border py-5 transition-colors duration-200 hover:border-primary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
                 >
-                  <span>
-                    <span className="block text-lg font-medium tracking-tight sm:text-xl">
+                  <span className="min-w-0">
+                    <span className="block text-lg font-medium tracking-tight transition-colors duration-200 group-hover:text-primary sm:text-xl">
                       Join the studio
                     </span>
                     <span className="type-sm mt-1 block text-muted-foreground">
@@ -199,7 +199,7 @@ function Careers() {
           </div>
 
           {careerRoles.length > 0 && (
-            <div className="mt-12 border-t border-border">
+            <div className="mt-9 border-t border-border md:mt-10">
               {careerRoles.map((role, idx) => {
                 const isExpanded = expandedRole === role.id;
                 const hasMetadata = Boolean(
@@ -213,39 +213,48 @@ function Careers() {
 
                 return (
                   <ScrollReveal key={role.id} delay={idx}>
-                    <article className="border-b border-border">
-                      <div className="group flex flex-col gap-5 py-7 md:grid md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_auto_auto] md:items-center md:gap-8">
+                    <article className="group border-b border-border transition-colors duration-200 hover:border-primary/40">
+                      <div className="flex flex-col gap-5 py-6 md:grid md:grid-cols-[minmax(0,1.6fr)_minmax(240px,1fr)_auto_auto] md:items-center md:gap-x-8 md:py-7">
                         <button
                           type="button"
                           onClick={() => setExpandedRole(isExpanded ? null : role.id)}
                           aria-expanded={isExpanded}
                           aria-controls={detailsId}
-                          className="flex min-w-0 cursor-pointer items-start justify-between gap-6 text-left md:col-span-3 md:grid md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_auto] md:items-center"
+                          className="min-w-0 cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
                         >
-                          <span className="min-w-0">
-                            <span className="block text-xl font-medium tracking-tight sm:text-2xl">
-                              {role.title}
-                            </span>
-                            {role.summary && (
-                              <span className="type-sm mt-2 block text-muted-foreground">
-                                {role.summary}
-                              </span>
-                            )}
+                          <span className="block text-xl font-medium tracking-tight transition-colors duration-200 group-hover:text-primary sm:text-2xl">
+                            {role.title}
                           </span>
-                          {hasMetadata && (
-                            <span className="type-sm flex flex-wrap gap-x-5 gap-y-1 text-muted-foreground">
-                              {role.department && <span>{role.department}</span>}
-                              {role.employmentType && <span>{role.employmentType}</span>}
-                              {role.workArrangement && <span>{role.workArrangement}</span>}
-                              {role.experience && <span>{role.experience}</span>}
-                              {role.duration && <span>{role.duration}</span>}
+                          {role.summary && (
+                            <span className="type-sm mt-2 block text-muted-foreground">
+                              {role.summary}
                             </span>
                           )}
-                          <span
-                            className={`grid size-10 shrink-0 place-items-center rounded-full border transition-colors duration-200 group-hover:border-primary ${
+                        </button>
+
+                        {hasMetadata && (
+                          <div className="type-sm grid grid-cols-1 gap-x-6 gap-y-2 text-muted-foreground sm:grid-cols-2">
+                            {role.department && <span>{role.department}</span>}
+                            {role.employmentType && <span>{role.employmentType}</span>}
+                            {role.workArrangement && <span>{role.workArrangement}</span>}
+                            {role.duration && <span>{role.duration}</span>}
+                            {role.experience && (
+                              <span className="sm:col-span-2">{role.experience}</span>
+                            )}
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-6 md:contents">
+                          <button
+                            type="button"
+                            onClick={() => setExpandedRole(isExpanded ? null : role.id)}
+                            aria-label={isExpanded ? "Hide role details" : "Show role details"}
+                            aria-expanded={isExpanded}
+                            aria-controls={detailsId}
+                            className={`grid size-10 shrink-0 place-items-center rounded-full border transition-colors duration-200 hover:border-primary hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 ${
                               isExpanded
-                                ? "border-primary bg-primary text-primary-foreground"
-                                : "border-border"
+                                ? "border-primary/50 bg-primary/5 text-primary"
+                                : "border-border text-muted-foreground"
                             }`}
                           >
                             <ChevronDown
@@ -253,16 +262,16 @@ function Careers() {
                                 isExpanded ? "rotate-180" : ""
                               }`}
                             />
-                          </span>
-                        </button>
-                        <a
-                          href="#apply"
-                          onClick={() => applyFor(role.title)}
-                          className="group/apply inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors duration-200 hover:text-primary-hover md:col-start-4"
-                        >
-                          Apply
-                          <ArrowUpRight className="size-4 transition-transform duration-300 ease-out group-hover/apply:translate-x-0.5 group-hover/apply:-translate-y-0.5" />
-                        </a>
+                          </button>
+                          <a
+                            href="#apply"
+                            onClick={() => applyFor(role.title)}
+                            className="group/apply inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors duration-200 hover:text-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 md:justify-self-end"
+                          >
+                            Apply
+                            <ArrowUpRight className="size-4 transition-transform duration-300 ease-out group-hover/apply:translate-x-0.5 group-hover/apply:-translate-y-0.5" />
+                          </a>
+                        </div>
                       </div>
 
                       {isExpanded && (
@@ -346,7 +355,7 @@ function Careers() {
             </div>
           )}
 
-          <ScrollReveal className="mt-14 md:mt-16">
+          <ScrollReveal className="mt-10 md:mt-12">
             <div className="grid gap-6 border-t border-border pt-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
               <div>
                 <h3 className="font-heading text-2xl font-light tracking-tight sm:text-3xl">
