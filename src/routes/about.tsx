@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { ScrollReveal } from "@/hooks/use-scroll-animation";
 import { useContactModal } from "@/context/use-contact-modal";
@@ -342,6 +342,13 @@ function About() {
                 We're not here to simply deliver designs. We collaborate, solve, create, and build
                 alongside the brands we work with.
               </p>
+              <Link
+                to="/careers"
+                className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-hover"
+              >
+                See open roles
+                <ArrowRight className="size-4 transition-transform duration-250 ease-out group-hover:translate-x-0.5" />
+              </Link>
             </ScrollReveal>
           </div>
 

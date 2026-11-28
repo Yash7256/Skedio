@@ -127,12 +127,14 @@ export function SiteHeader({ links }: { links: HeaderLink[] }) {
             <Wordmark />
           </Link>
 
-          <div className="flex items-center gap-6 md:gap-10">
-            <ul className="type-label hidden items-center gap-10 uppercase md:flex">
+          <div className="flex items-center gap-6 md:gap-4 lg:gap-10">
+            <ul className="type-label hidden items-center gap-5 uppercase md:flex lg:gap-10">
               {links.map((link) =>
                 link.current ? (
                   <li key={link.label}>
-                    <span className="type-body tracking-[0.08em] text-primary">{link.label}</span>
+                    <span className="sk-nav-current type-body inline-block pb-1.5 tracking-[0.08em] text-primary">
+                      {link.label}
+                    </span>
                   </li>
                 ) : (
                   <li key={link.label}>
@@ -221,7 +223,7 @@ export function SiteHeader({ links }: { links: HeaderLink[] }) {
             link.current ? (
               <span
                 key={link.label}
-                className="border-b border-border/60 py-6 text-lg font-semibold text-primary sm:text-xl"
+                className="sk-nav-current block py-6 text-lg font-semibold text-primary sm:text-xl"
               >
                 {link.label}
               </span>

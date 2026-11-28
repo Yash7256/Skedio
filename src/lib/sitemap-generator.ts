@@ -55,6 +55,7 @@ export function generateSitemapXml(): string {
     { path: "/services", changefreq: "monthly", priority: "0.9" },
     { path: "/projects", changefreq: "weekly", priority: "0.9" },
     { path: "/about", changefreq: "monthly", priority: "0.8" },
+    { path: "/careers", changefreq: "monthly", priority: "0.7" },
     { path: "/insights", changefreq: "weekly", priority: "0.8" },
     { path: "/blog", changefreq: "weekly", priority: "0.8" },
     { path: "/contact", changefreq: "monthly", priority: "0.9" },

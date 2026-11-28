@@ -10,10 +10,11 @@ import type { HeaderLink } from "@/components/SiteHeader";
  * pages, so the same nav item meant two different things depending on where
  * you were standing. Declaring them here makes one edit apply everywhere.
  *
- * About stays a full page. The homepage has no studio/team section, so a hash
- * for it would be a jump to nowhere; the bio and the roster only exist on
- * /about. The `/projects` and `/services` pages also stay — reachable from the
- * cards inside each homepage section and from the footer.
+ * About and Careers stay full pages. The homepage has no studio/team section,
+ * so a hash for it would be a jump to nowhere; the bio and the roster only exist
+ * on /about, and the open roles live on /careers. The `/projects` and
+ * `/services` pages also stay — reachable from the cards inside each homepage
+ * section and from the footer.
  *
  * The `id` of each section and the `hash` here must agree, or the jump lands
  * at the top of the page instead. Every target below sets `scroll-mt-24`, so
@@ -26,6 +27,7 @@ const PRIMARY_NAV: NavItem[] = [
   { label: "Services", to: "/", hash: "services" },
   { label: "Blog", to: "/", hash: "blog" },
   { label: "About", to: "/about" },
+  { label: "Careers", to: "/careers" },
 ];
 
 /**

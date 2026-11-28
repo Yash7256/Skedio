@@ -31,6 +31,7 @@ const navSections: FooterNavSection[] = [
     title: "Company",
     links: [
       { label: "About Us", href: "/about" },
+      { label: "Careers", href: "/careers" },
       { label: "Services", href: "/services" },
       { label: "Contact", href: "/contact" },
     ],
